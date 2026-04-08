@@ -1,0 +1,168 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  role       String?
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Website {
+  id          String  @id @default(cuid())
+  title       String
+  url         String  @unique
+  description String?
+
+  categories WebsiteCategory[]
+  pages      WebsitePage[]
+  tech       WebsiteTech[]
+  fonts      WebsiteFont[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("website")
+}
+
+model Category {
+  id       String            @id @default(cuid())
+  name     String            @unique
+  websites WebsiteCategory[]
+
+  @@map("category")
+}
+
+model WebsiteCategory {
+  website    Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId  String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+
+  @@id([websiteId, categoryId])
+  @@map("website_category")
+}
+
+model Page {
+  id       String        @id @default(cuid())
+  name     String        @unique
+  websites WebsitePage[]
+
+  @@map("page")
+}
+
+model WebsitePage {
+  website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String
+  page      Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  pageId    String
+
+  @@id([websiteId, pageId])
+  @@map("website_page")
+}
+
+model Tech {
+  id       String        @id @default(cuid())
+  name     String        @unique
+  websites WebsiteTech[]
+
+  @@map("tech")
+}
+
+model WebsiteTech {
+  website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String
+  tech      Tech    @relation(fields: [techId], references: [id], onDelete: Cascade)
+  techId    String
+
+  @@id([websiteId, techId])
+  @@map("website_tech")
+}
+
+model Font {
+  id       String        @id @default(cuid())
+  name     String        @unique
+  websites WebsiteFont[]
+
+  @@map("font")
+}
+
+model WebsiteFont {
+  website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String
+  font      Font    @relation(fields: [fontId], references: [id], onDelete: Cascade)
+  fontId    String
+
+  @@id([websiteId, fontId])
+  @@map("website_font")
+}
