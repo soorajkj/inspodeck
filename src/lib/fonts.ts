@@ -1,6 +1,8 @@
-import { Geist_Mono, Syne } from "next/font/google";
+import { Geist_Mono, Mona_Sans } from "next/font/google";
 
-const sans = Syne({
+// -FontOnest-
+// -FontMonaSans-
+const sans = Mona_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",

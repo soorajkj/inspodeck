@@ -9,6 +9,6 @@ export const getWebsites = async () => {
 
 export const createWebsite = async (data: CreateWebsiteSchema) => {
   const res = await hrpc.api.websites.$post({ json: data });
-  if (!res.ok) throw new Error("Failed to fecth websites");
+  if (!res.ok) throw new Error("Failed to create website");
   return await res.json();
 };

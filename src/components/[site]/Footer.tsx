@@ -30,14 +30,68 @@ export default function Footer() {
                 </svg>
               </Link>
               <div className="text-sm font-medium text-neutral-950">
-                <p>Inspodeck Limited</p>
-                <p>B1, 9 Tanner St</p>
-                <p>London, SE1 3LE</p>
+                <p>Inspodeck</p>
+                <p>Kochi, India</p>
               </div>
             </div>
           </div>
           <div className="col-span-12 lg:col-span-8">
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+              <div>
+                <h3 className="mb-4 text-sm font-medium text-neutral-950">
+                  Platform
+                </h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link
+                      className="text-sm font-medium text-neutral-600 transition hover:underline"
+                      href="/"
+                    >
+                      Websites
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm font-medium text-neutral-600 transition hover:underline"
+                      href="/"
+                    >
+                      Templates
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm font-medium text-neutral-600 transition hover:underline"
+                      href="/"
+                    >
+                      Pricing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm font-medium text-neutral-600 transition hover:underline"
+                      href="/"
+                    >
+                      Submit
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm font-medium text-neutral-600 transition hover:underline"
+                      href="/"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm font-medium text-neutral-600 transition hover:underline"
+                      href="/"
+                    >
+                      Terms of Service
+                    </Link>
+                  </li>
+                </ul>
+              </div>
               <div>
                 <h3 className="mb-4 text-sm font-medium text-neutral-950">
                   Resources
@@ -48,78 +102,15 @@ export default function Footer() {
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
                       href="/"
                     >
+                      Blogs
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm font-medium text-neutral-600 transition hover:underline"
+                      href="/"
+                    >
                       Documentation
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      Resources
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      Blog
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      Guides
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      AI Search Data
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="mb-4 text-sm font-medium text-neutral-950">
-                  Free Tools
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      ChatGPT Shopping Checker
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      Free AI SEO Agent
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      Free AI Visibility Score
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      AI Shopping Agent Checker
                     </Link>
                   </li>
                 </ul>
@@ -150,14 +141,6 @@ export default function Footer() {
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
                       href="/"
                     >
-                      Authors
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
                       Contact
                     </Link>
                   </li>
@@ -169,19 +152,11 @@ export default function Footer() {
                       Careers
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      Community
-                    </Link>
-                  </li>
                 </ul>
               </div>
               <div>
                 <h3 className="mb-4 text-sm font-medium text-neutral-950">
-                  Compare
+                  Community
                 </h3>
                 <ul className="space-y-3">
                   <li>
@@ -189,7 +164,7 @@ export default function Footer() {
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
                       href="/"
                     >
-                      All Comparisons
+                      Twitter
                     </Link>
                   </li>
                   <li>
@@ -197,7 +172,7 @@ export default function Footer() {
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
                       href="/"
                     >
-                      vs Semrush
+                      Discord
                     </Link>
                   </li>
                   <li>
@@ -205,15 +180,7 @@ export default function Footer() {
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
                       href="/"
                     >
-                      vs Ahrefs
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
-                    >
-                      vs Profound
+                      Dribble
                     </Link>
                   </li>
                 </ul>

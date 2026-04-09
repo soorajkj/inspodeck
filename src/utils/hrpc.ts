@@ -1,5 +1,5 @@
 import { hc } from "hono/client";
-import { ApiType } from "@/app/api/[[...route]]/route";
+import { ApiType } from "@/api";
 
 export const hrpc = hc<ApiType>(process.env.NEXT_PUBLIC_BASE_URL as string, {
   init: { credentials: "include" },

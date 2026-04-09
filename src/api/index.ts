@@ -1,0 +1,27 @@
+import { HTTPException } from "hono/http-exception";
+import { hono } from "@/lib/hono";
+import { websitesRoute } from "@/api/routes/websites";
+import { categoriesRoute } from "@/api/routes/categories";
+import { pagesRoute } from "@/api/routes/pages";
+import { techRoute } from "@/api/routes/tech";
+import { fontsRoute } from "@/api/routes/fonts";
+
+export const api = hono
+  .createApp()
+  .basePath("/api")
+  .route("/websites", websitesRoute)
+  .route("/categories", categoriesRoute)
+  .route("/pages", pagesRoute)
+  .route("/tech", techRoute)
+  .route("/fonts", fontsRoute)
+  .onError(async (err, c) => {
+    console.log(err);
+    switch (true) {
+      case err instanceof HTTPException:
+        return err.getResponse();
+      default:
+        return c.json({ err: err.message }, 500);
+    }
+  });
+
+export type ApiType = typeof api;

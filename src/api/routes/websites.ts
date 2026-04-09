@@ -33,6 +33,7 @@ export const websitesRoute = hono
       title: site.title,
       url: site.url,
       description: site.description,
+      image: site.image,
       categories: site.categories.map((c) => c.category.name),
       pages: site.pages.map((p) => p.page.name),
       tech: site.tech.map((t) => t.tech.name),
@@ -84,9 +85,9 @@ export const websitesRoute = hono
       },
     }),
     async (c) => {
+      const cloudinary = c.get("cloudinary");
       const body = await c.req.parseBody();
       const file = body["image"];
-      const cloudinary = c.get("cloudinary");
       if (!file || !(file instanceof File)) {
         return c.json("Image file is required", 400);
       }
