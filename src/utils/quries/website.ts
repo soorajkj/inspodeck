@@ -27,3 +27,11 @@ export const updateWebsiteThumbnail = async (
   if (!res.ok) throw new Error("Failed to upload image");
   return await res.json();
 };
+
+export const deleteWebsite = async (id: string) => {
+  const res = await hrpc.api.websites[":id"].$delete({
+    param: { id },
+  });
+  if (!res.ok) throw new Error("Failed to delete website");
+  return await res.json();
+};
