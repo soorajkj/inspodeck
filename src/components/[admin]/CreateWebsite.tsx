@@ -76,7 +76,7 @@ export default function CreateWebsite() {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-rose-600 px-3 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-rose-400 hover:bg-rose-500 disabled:pointer-events-none disabled:opacity-20">
+      <Dialog.Trigger className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-orange-600 px-3 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-20">
         Create website
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -89,10 +89,10 @@ export default function CreateWebsite() {
               </Dialog.Title>
               <div className="ml-auto flex items-center gap-1.5">
                 <div
-                  className={`h-1.5 w-6 rounded-full transition-colors ${step === "details" ? "bg-rose-600" : "bg-gray-200"}`}
+                  className={`h-1.5 w-6 rounded-full transition-colors ${step === "details" ? "bg-orange-600" : "bg-gray-200"}`}
                 />
                 <div
-                  className={`h-1.5 w-6 rounded-full transition-colors ${step === "thumbnail" ? "bg-rose-600" : "bg-gray-200"}`}
+                  className={`h-1.5 w-6 rounded-full transition-colors ${step === "thumbnail" ? "bg-orange-600" : "bg-gray-200"}`}
                 />
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function CreateWebsite() {
                   <Input
                     {...register("title")}
                     placeholder="e.g. Acme"
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-2.5 text-sm transition-all focus:border-rose-500 focus:bg-white focus:ring-4 focus:ring-rose-500/10 focus:outline-none"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
                   />
                   {errors.title && (
                     <p className="text-xs font-medium text-red-500">
@@ -132,7 +132,7 @@ export default function CreateWebsite() {
                     {...register("url")}
                     type="url"
                     placeholder="eg: https://acme.com"
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-2.5 text-sm transition-all focus:border-rose-500 focus:bg-white focus:ring-4 focus:ring-rose-500/10 focus:outline-none"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
                   />
                   {errors.url && (
                     <p className="text-xs font-medium text-red-500">
@@ -149,7 +149,7 @@ export default function CreateWebsite() {
                 <textarea
                   {...register("description")}
                   placeholder="A short description of the website..."
-                  className="h-24 w-full resize-none rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-2.5 text-sm transition-all focus:border-rose-500 focus:bg-white focus:ring-4 focus:ring-rose-500/10 focus:outline-none"
+                  className="h-24 w-full resize-none rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
                 />
               </div>
 
@@ -224,7 +224,7 @@ export default function CreateWebsite() {
                     {tech.map((t) => (
                       <label
                         key={t.id}
-                        className="group relative flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5 transition-all hover:border-rose-200 hover:bg-rose-50"
+                        className="group relative flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5 transition-all hover:border-orange-200 hover:bg-orange-50"
                       >
                         <input
                           type="checkbox"
@@ -232,7 +232,7 @@ export default function CreateWebsite() {
                           {...register("techIds")}
                           className="peer hidden"
                         />
-                        <div className="h-4 w-4 rounded border border-gray-300 transition-all peer-checked:border-rose-600 peer-checked:bg-rose-600" />
+                        <div className="h-4 w-4 rounded border border-gray-300 transition-all peer-checked:border-orange-600 peer-checked:bg-orange-600" />
                         <span className="text-xs font-medium text-gray-600 transition-colors group-hover:text-orange-900 peer-checked:text-orange-900">
                           {t.name}
                         </span>
@@ -249,7 +249,7 @@ export default function CreateWebsite() {
                     {fonts.map((f) => (
                       <label
                         key={f.id}
-                        className="group relative flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5 transition-all hover:border-rose-200 hover:bg-rose-50"
+                        className="group relative flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5 transition-all hover:border-orange-200 hover:bg-orange-50"
                       >
                         <input
                           type="checkbox"
@@ -257,7 +257,7 @@ export default function CreateWebsite() {
                           {...register("fontIds")}
                           className="peer hidden"
                         />
-                        <div className="h-4 w-4 rounded border border-gray-300 transition-all peer-checked:border-rose-600 peer-checked:bg-rose-600" />
+                        <div className="h-4 w-4 rounded border border-gray-300 transition-all peer-checked:border-orange-600 peer-checked:bg-orange-600" />
                         <span className="text-xs font-medium text-gray-600 transition-colors group-hover:text-orange-900 peer-checked:text-orange-900">
                           {f.name}
                         </span>
@@ -274,7 +274,7 @@ export default function CreateWebsite() {
                 <Button
                   type="submit"
                   disabled={isCreating}
-                  className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-rose-600 px-3 text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-rose-400 transition-all hover:bg-rose-500 disabled:pointer-events-none disabled:opacity-20"
+                  className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-orange-600 px-3 text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 transition-all hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-20"
                 >
                   {isCreating ? "Creating..." : "Continue"}
                   <HugeiconsIcon icon={ArrowRight01Icon} className="h-4 w-4" />

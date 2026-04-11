@@ -14,7 +14,7 @@ export default function Footer() {
                   viewBox="0 0 200 200"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="text-rose-500"
+                  className="text-orange-500"
                 >
                   <g clipPath="url(#clip0_1113_5188)">
                     <path

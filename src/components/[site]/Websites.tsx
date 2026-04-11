@@ -10,7 +10,7 @@ export default function Websites() {
     <section className="relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="py-24">
-          <div role="list" className="grid grid-cols-12 gap-x-6 gap-y-12">
+          <div role="list" className="grid grid-cols-12 gap-x-6 gap-y-8">
             {websites.map((website) => (
               <div
                 key={website.id}

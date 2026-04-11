@@ -1,8 +1,8 @@
-import { Geist_Mono, Mona_Sans } from "next/font/google";
+import { Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 
 // -FontOnest-
 // -FontMonaSans-
-const sans = Mona_Sans({
+const sans = Bricolage_Grotesque({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",

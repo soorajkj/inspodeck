@@ -9,18 +9,23 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import Image from "next/image";
-import { Link01Icon, Globe02Icon, Delete02Icon } from "@hugeicons/core-free-icons";
+import {
+  Link01Icon,
+  Globe02Icon,
+  Delete02Icon,
+} from "@hugeicons/core-free-icons";
+import { Button } from "@base-ui/react/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useWebsitesQuery } from "@/hooks/useWebsitesQuery";
 import { useWebsitesDeleteMutation } from "@/hooks/useWebsitesMutations";
 import { TWebsite } from "@/types/response";
-import { Button } from "@base-ui/react/button";
 
 const columnHelper = createColumnHelper<TWebsite>();
 
 export default function Websites() {
   const { data: websites = [] } = useWebsitesQuery();
-  const { mutateAsync: deleteWebsite, isPending: isDeleting } = useWebsitesDeleteMutation();
+  const { mutateAsync: deleteWebsite, isPending: isDeleting } =
+    useWebsitesDeleteMutation();
 
   const columns = [
     columnHelper.accessor("image", {
@@ -66,7 +71,7 @@ export default function Websites() {
           href={info.getValue()}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-rose-500 hover:underline"
+          className="inline-flex items-center gap-1.5 text-sm text-orange-500 hover:underline"
         >
           <HugeiconsIcon icon={Link01Icon} className="h-3 w-3" />
           {new URL(info.getValue()).hostname}
@@ -80,7 +85,7 @@ export default function Websites() {
           {info.getValue().map((cat) => (
             <span
               key={cat}
-              className="rounded-full bg-rose-50 px-2 py-0.5 text-xs text-rose-700"
+              className="rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-700"
             >
               {cat}
             </span>

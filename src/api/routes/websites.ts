@@ -90,30 +90,21 @@ export const websitesRoute = hono
       const cloudinary = c.get("cloudinary");
       const body = c.req.valid("form");
 
-      // 1. Get old image ID to delete if it exists
-      const website = await db.website.findUnique({
-        where: { id },
-        select: { imagePublicId: true },
-      });
-
-      if (website?.imagePublicId) {
-        await cloudinary.uploader.destroy(website.imagePublicId);
-      }
-
-      // 2. Upload new image
+      // Upload new image using website ID as the public_id
       const file = body.image;
       const arrayBuffer = await file.arrayBuffer();
       const base46 = encodeBase64(arrayBuffer);
       const image = `data:image/png;base64,${base46}`;
-      const result = await cloudinary.uploader.upload(image);
+      const result = await cloudinary.uploader.upload(image, {
+        public_id: id,
+        overwrite: true,
+        invalidate: true,
+      });
 
-      // 3. Update database
+      // Update database
       await db.website.update({
         where: { id },
-        data: {
-          image: result.secure_url,
-          imagePublicId: result.public_id,
-        },
+        data: { image: result.secure_url },
       });
       return c.json(result);
     }
@@ -123,17 +114,10 @@ export const websitesRoute = hono
     const id = c.req.param("id");
     const cloudinary = c.get("cloudinary");
 
-    // 1. Get image ID to delete
-    const website = await db.website.findUnique({
-      where: { id },
-      select: { imagePublicId: true },
-    });
+    // Delete image from Cloudinary using the website ID as public_id
+    await cloudinary.uploader.destroy(id);
 
-    if (website?.imagePublicId) {
-      await cloudinary.uploader.destroy(website.imagePublicId);
-    }
-
-    // 2. Delete from database
+    // Delete from database
     const result = await db.website.delete({
       where: { id },
     });
