@@ -1,12 +1,28 @@
 import { useMutation } from "@tanstack/react-query";
-import { createWebsite } from "@/utils/quries/website";
+import { createWebsite, updateWebsiteThumbnail } from "@/utils/quries/website";
 import { getQueryClient } from "@/utils/queryClient";
+import { UpdateWebsiteImageSchema } from "@/utils/schemas/website";
 
 export const useWebsitesCreateMutation = () => {
   const queryClient = getQueryClient();
 
   return useMutation({
     mutationFn: createWebsite,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["WEBSITES"] }),
+  });
+};
+
+export const useWebsitesUpdateThumbnailMutation = () => {
+  const queryClient = getQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: UpdateWebsiteImageSchema;
+    }) => updateWebsiteThumbnail(id, data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["WEBSITES"] }),
   });
 };

@@ -45,7 +45,7 @@ function Section({
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
           placeholder={`Add ${title.toLowerCase()}...`}
-          className="flex-1 rounded border px-3 py-1 text-sm focus:border-orange-500 focus:outline-none"
+          className="flex-1 rounded border px-3 py-1 text-sm focus:border-rose-500 focus:outline-none"
         />
         <Button
           onClick={() => {
@@ -54,7 +54,7 @@ function Section({
               setName("");
             }
           }}
-          className="rounded-lg bg-orange-600 px-3 py-1 text-xs font-semibold text-white hover:bg-orange-500 disabled:opacity-50"
+          className="rounded-lg bg-rose-500 px-3 py-1 text-xs font-semibold text-white hover:bg-rose-500 disabled:opacity-50"
         >
           Add
         </Button>

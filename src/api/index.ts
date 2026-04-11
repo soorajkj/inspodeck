@@ -1,4 +1,3 @@
-import { HTTPException } from "hono/http-exception";
 import { hono } from "@/lib/hono";
 import { websitesRoute } from "@/api/routes/websites";
 import { categoriesRoute } from "@/api/routes/categories";
@@ -16,12 +15,7 @@ export const api = hono
   .route("/fonts", fontsRoute)
   .onError(async (err, c) => {
     console.log(err);
-    switch (true) {
-      case err instanceof HTTPException:
-        return err.getResponse();
-      default:
-        return c.json({ err: err.message }, 500);
-    }
+    return c.json("Internal server error", 500);
   });
 
 export type ApiType = typeof api;

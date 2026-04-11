@@ -19,7 +19,7 @@ export default function Website({ website }: WebsiteProps) {
     <div className="grid overflow-hidden">
       <div className="relative h-96 cursor-pointer overflow-hidden rounded-lg border border-neutral-200">
         <Image
-          src="/preview.jpg"
+          src={website.image || "/preview.jpg"}
           alt={website.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -27,9 +27,9 @@ export default function Website({ website }: WebsiteProps) {
           className="object-cover object-top"
         />
       </div>
-      <div className="flex items-center py-4 pb-0">
+      <div className="flex items-center py-2 pb-0">
         <div className="relative flex-1">
-          <h2 className="max-w-48 truncate text-sm font-semibold text-orange-600">
+          <h2 className="max-w-48 truncate text-sm font-semibold text-rose-500">
             {website.title}
           </h2>
           <p className="line-clamp-1 w-full max-w-44 flex-none truncate text-xs font-medium text-neutral-600">

@@ -2,7 +2,10 @@ import { zValidator } from "@hono/zod-validator";
 import { bodyLimit } from "hono/body-limit";
 import { encodeBase64 } from "hono/utils/encode";
 import { hono } from "@/lib/hono";
-import { createWebsiteSchema } from "@/utils/schemas/website";
+import {
+  createWebsiteWithoutImageSchema,
+  updateWebsiteImageSchema,
+} from "@/utils/schemas/website";
 
 export const websitesRoute = hono
   .createApp()
@@ -42,60 +45,59 @@ export const websitesRoute = hono
 
     return c.json(result);
   })
-  .post("/", zValidator("json", createWebsiteSchema), async (c) => {
+  .post("/", zValidator("json", createWebsiteWithoutImageSchema), async (c) => {
     const db = c.get("prisma");
-    const json = c.req.valid("json");
-    const data = await db.website.create({
+    const form = c.req.valid("json");
+    const result = await db.website.create({
       data: {
-        title: json.title,
-        url: json.url,
-        description: json.description,
+        title: form.title,
+        url: form.url,
+        description: form.description,
         categories: {
-          create: [...new Set(json.categoryIds)].map((id) => ({
+          create: [...new Set(form.categoryIds)].map((id) => ({
             category: { connect: { id } },
           })),
         },
         pages: {
-          create: [...new Set(json.pageIds)].map((id) => ({
+          create: [...new Set(form.pageIds)].map((id) => ({
             page: { connect: { id } },
           })),
         },
         tech: {
           create:
-            [...new Set(json.techIds)]?.map((id) => ({
+            [...new Set(form.techIds)]?.map((id) => ({
               tech: { connect: { id } },
             })) || [],
         },
         fonts: {
           create:
-            [...new Set(json.fontIds)]?.map((id) => ({
+            [...new Set(form.fontIds)]?.map((id) => ({
               font: { connect: { id } },
             })) || [],
         },
       },
     });
-    return c.json(data);
+
+    return c.json(result);
   })
-  .post(
-    "/upload",
-    bodyLimit({
-      maxSize: 5 * 1024 * 1024, // 5 MiB
-      onError: (c) => {
-        return c.json("File too large", 413);
-      },
-    }),
+  .patch(
+    "/:id/image",
+    bodyLimit({ maxSize: 5 * 1024 * 1024 }),
+    zValidator("form", updateWebsiteImageSchema),
     async (c) => {
+      const db = c.get("prisma");
+      const id = c.req.param("id");
       const cloudinary = c.get("cloudinary");
-      const body = await c.req.parseBody();
-      const file = body["image"];
-      if (!file || !(file instanceof File)) {
-        return c.json("Image file is required", 400);
-      }
-      const byteArrayBuffer = await file.arrayBuffer();
-      const base46 = encodeBase64(byteArrayBuffer);
-      const result = await cloudinary.uploader.upload(
-        `data:image/png;base64,${base46}`
-      );
+      const body = c.req.valid("form");
+      const file = body.image;
+      const arrayBuffer = await file.arrayBuffer();
+      const base46 = encodeBase64(arrayBuffer);
+      const image = `data:image/png;base64,${base46}`;
+      const result = await cloudinary.uploader.upload(image);
+      await db.website.update({
+        where: { id },
+        data: { image: result.secure_url },
+      });
       return c.json(result);
     }
   );

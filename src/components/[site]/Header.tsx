@@ -16,7 +16,7 @@ export default function Header() {
                 viewBox="0 0 200 200"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-orange-600"
+                className="text-rose-500"
               >
                 <g clipPath="url(#clip0_1113_5188)">
                   <path
@@ -49,7 +49,7 @@ export default function Header() {
             >
               Join now
             </Button>
-            <Button className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-orange-600 px-3 text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0">
+            <Button className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-rose-500 px-3 text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-rose-400 hover:bg-rose-500 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0">
               <HugeiconsIcon icon={ComponentIcon} fill="white" />
               Submit a website
             </Button>

@@ -60,7 +60,7 @@ const columns = [
         href={info.getValue()}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-sm text-orange-600 hover:underline"
+        className="inline-flex items-center gap-1.5 text-sm text-rose-500 hover:underline"
       >
         <HugeiconsIcon icon={Link01Icon} className="h-3 w-3" />
         {new URL(info.getValue()).hostname}
@@ -74,7 +74,7 @@ const columns = [
         {info.getValue().map((cat) => (
           <span
             key={cat}
-            className="rounded-full bg-orange-50 px-2 py-0.5 text-sm text-orange-700"
+            className="rounded-full bg-rose-50 px-2 py-0.5 text-sm text-rose-700"
           >
             {cat}
           </span>
