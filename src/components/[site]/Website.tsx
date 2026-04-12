@@ -18,7 +18,7 @@ export default function Website({ website }: WebsiteProps) {
     <div className="group relative flex cursor-pointer flex-col gap-2">
       <div className="relative max-w-full cursor-pointer">
         <div className="relative flex flex-col gap-1">
-          <div className="absolute inset-0 flex h-full w-full items-start rounded opacity-0 transition-all duration-300 group-hover:opacity-100">
+          <div className="absolute inset-0 z-10 flex h-full w-full items-start rounded opacity-0 transition-all duration-300 group-hover:opacity-100">
             <div className="flex w-full justify-end gap-2 rounded-sm p-3">
               <Button
                 className="relative inline-flex aspect-square size-8 shrink cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-200 bg-white/90 text-sm leading-none font-semibold whitespace-nowrap text-neutral-800 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"

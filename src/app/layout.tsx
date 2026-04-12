@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { fonts } from "@/lib/fonts";
-import ThemeProvider from "@/components/ThemeProvider";
+// import ThemeProvider from "@/components/ThemeProvider";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import "@/app/globals.css";
 
@@ -13,13 +13,13 @@ export default function Layout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={fonts} suppressHydrationWarning>
       <body className="h-full min-h-dvh w-full font-sans text-base font-normal antialiased">
-        <ThemeProvider
+        {/* <ThemeProvider
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
-          <ReactQueryProvider>{children}</ReactQueryProvider>
-        </ThemeProvider>
+        > */}
+        <ReactQueryProvider>{children}</ReactQueryProvider>
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );
