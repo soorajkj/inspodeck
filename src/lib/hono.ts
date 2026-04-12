@@ -1,6 +1,5 @@
 import { createFactory } from "hono/factory";
 import { JwtVariables } from "hono/jwt";
-import { getRuntimeKey } from "hono/adapter";
 import { v2 } from "cloudinary";
 import { prisma } from "@/lib/prisma";
 
@@ -17,8 +16,6 @@ export const hono = createFactory<Env>({
   defaultAppOptions: { strict: false },
   initApp(app) {
     app.use(async (c, next) => {
-      const runtime = getRuntimeKey();
-      console.log(`Running on ${runtime} runtime.`);
       c.set("prisma", prisma);
       v2.config({
         cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,

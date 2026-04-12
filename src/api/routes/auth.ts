@@ -6,8 +6,6 @@ import { hono } from "@/lib/hono";
 import { signinSchema, signupSchema } from "@/utils/schemas/auth";
 import { jwtMiddleware } from "@/api/middlewares/jwt";
 
-const COOKIE_KEY = "token";
-
 export const authRoute = hono
   .createApp()
   .post("/signup", zValidator("json", signupSchema), async (c) => {
@@ -20,31 +18,19 @@ export const authRoute = hono
       },
     });
 
-    if (existingUser) return c.json("Email already exists", 400);
+    if (existingUser) {
+      return c.json({ error: "Email already in use" }, 400);
+    }
 
     const hashedPassword = await bcrypt.hash(json.password, 12);
 
     const user = await db.user.create({
       data: {
+        name: json.name,
         email: json.email,
         password: hashedPassword,
       },
-    });
-
-    const payload = {
-      userId: user.id,
-      role: user.role,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour
-    };
-
-    const token = await sign(payload, process.env.JWT_SECRET!);
-
-    setCookie(c, COOKIE_KEY, token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Lax",
-      path: "/",
-      maxAge: 60 * 60, // 1 hour
+      omit: { password: true },
     });
 
     return c.json({
@@ -62,21 +48,28 @@ export const authRoute = hono
       },
     });
 
-    if (!user) return c.json("User not found", 404);
+    if (!user) {
+      return c.json({ error: "User not found" }, 404);
+    }
 
     const isPasswordMatch = await bcrypt.compare(json.password, user.password);
 
-    if (!isPasswordMatch) return c.json("Invalid credentials", 400);
+    if (!isPasswordMatch) {
+      return c.json({ error: "Invalid credentials" }, 400);
+    }
 
-    const payload = {
-      userId: user.id,
-      role: user.role,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour
-    };
+    const token = await sign(
+      {
+        userId: user.id,
+        role: user.role,
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour
+      },
+      process.env.JWT_SECRET!,
+      "HS256"
+    );
 
-    const token = await sign(payload, process.env.JWT_SECRET!);
-
-    setCookie(c, COOKIE_KEY, token, {
+    setCookie(c, process.env.JWT_COOKIE_NAME!, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
@@ -84,13 +77,20 @@ export const authRoute = hono
       maxAge: 60 * 60, // 1 hour
     });
 
+    const { password: _password, ...userWithoutPassword } = user;
+
     return c.json({
       message: "User signed in successfully",
-      user,
+      user: userWithoutPassword,
     });
   })
   .delete("/signout", async (c) => {
-    deleteCookie(c, COOKIE_KEY);
+    deleteCookie(c, process.env.JWT_COOKIE_NAME!, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
+      path: "/",
+    });
 
     return c.json({
       message: "User signed out successfully",
@@ -98,8 +98,8 @@ export const authRoute = hono
   })
   .get("/test", jwtMiddleware, async (c) => {
     const payload = c.get("jwtPayload");
-    console.log(payload);
     return c.json({
       message: "User is authenticated",
+      userId: payload.userId,
     });
   });

@@ -30,6 +30,22 @@ export default function SignupForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div className="space-y-2">
+        <label className="text-sm font-semibold text-gray-700">Name</label>
+        <div className="group relative">
+          <Input
+            type="text"
+            {...register("name")}
+            placeholder="John Doe"
+            className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-3 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+          />
+        </div>
+        {errors.name && (
+          <p className="text-xs font-medium text-red-500">
+            {errors.name.message}
+          </p>
+        )}
+      </div>
+      <div className="space-y-2">
         <label className="text-sm font-semibold text-gray-700">Email</label>
         <div className="group relative">
           <Input

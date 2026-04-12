@@ -2,9 +2,8 @@
 
 import { Button } from "@base-ui/react/button";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowUpRight03Icon } from "@hugeicons/core-free-icons";
+import { ArrowUpRight03Icon, FavouriteIcon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
-import { Heart } from "lucide-react";
 import { Route } from "next";
 import Link from "next/link";
 import { TWebsite } from "@/types/response";
@@ -24,7 +23,7 @@ export default function Website({ website }: WebsiteProps) {
                 className="relative inline-flex aspect-square size-8 shrink cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-200 bg-white/90 text-sm leading-none font-semibold whitespace-nowrap text-neutral-800 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
                 aria-label={`Add ${website.title} to liked websites`}
               >
-                <Heart />
+                <HugeiconsIcon icon={FavouriteIcon} />
               </Button>
             </div>
           </div>
@@ -42,10 +41,10 @@ export default function Website({ website }: WebsiteProps) {
       </div>
       <div className="relative flex items-center justify-between gap-2">
         <div className="flex grow flex-col items-start truncate">
-          <h3 className="flex items-center truncate text-sm font-medium">
+          <h3 className="flex items-center truncate text-sm font-medium text-neutral-900">
             {website.title}
           </h3>
-          <p className="truncate text-sm leading-tight text-neutral-500">
+          <p className="truncate text-sm leading-tight text-neutral-600">
             {[...website.categories].join(", ")}
           </p>
         </div>
