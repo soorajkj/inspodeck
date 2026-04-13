@@ -12,7 +12,7 @@ export const authRoute = hono
     const json = c.req.valid("json");
     const db = c.get("prisma");
 
-    const existingUser = await db.user.findFirst({
+    const existingUser = await db.user.findUnique({
       where: {
         email: json.email,
       },
@@ -96,10 +96,20 @@ export const authRoute = hono
       message: "User signed out successfully",
     });
   })
-  .get("/test", jwtMiddleware, async (c) => {
+  .get("/session", jwtMiddleware, async (c) => {
     const payload = c.get("jwtPayload");
-    return c.json({
-      message: "User is authenticated",
-      userId: payload.userId,
+    const db = c.get("prisma");
+    const user = await db.user.findUnique({
+      where: {
+        id: payload.userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
     });
+
+    return c.json(user);
   });
