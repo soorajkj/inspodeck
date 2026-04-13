@@ -27,7 +27,7 @@ export default function Website({ website }: WebsiteProps) {
               </Button>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-2xl">
+          <div className="relative overflow-hidden rounded-xl border border-neutral-100">
             <Image
               alt={website.title}
               src={website.image || "/preview.jpg"}

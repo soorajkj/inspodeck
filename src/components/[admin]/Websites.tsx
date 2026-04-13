@@ -71,7 +71,7 @@ export default function Websites() {
           href={info.getValue()}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-orange-500 hover:underline"
+          className="inline-flex items-center gap-1.5 text-sm text-orange-600 hover:underline"
         >
           <HugeiconsIcon icon={Link01Icon} className="h-3 w-3" />
           {new URL(info.getValue()).hostname}

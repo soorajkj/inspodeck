@@ -77,7 +77,7 @@ export default function UploadImageForm({
             <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm transition-transform group-hover:scale-110">
               <HugeiconsIcon
                 icon={Image01Icon}
-                className="h-8 w-8 text-gray-400 group-hover:text-orange-500"
+                className="h-8 w-8 text-gray-400 group-hover:text-orange-600"
               />
             </div>
             <p className="text-sm font-semibold text-gray-900">

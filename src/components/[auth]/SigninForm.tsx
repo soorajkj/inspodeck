@@ -53,7 +53,7 @@ export default function SigninForm() {
           </label>
           <a
             href="#"
-            className="text-sm font-medium text-orange-600 transition hover:text-orange-500 hover:underline"
+            className="text-sm font-medium text-orange-600 transition hover:text-orange-600 hover:underline"
           >
             Forgot password?
           </a>
