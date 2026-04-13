@@ -7,11 +7,15 @@ import { Button } from "@base-ui/react/button";
 import { UserAdd01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { SignupSchema, signupSchema } from "@/utils/schemas/auth";
+import { useSignupMutation } from "@/hooks/useAuthMutations";
 
 export default function SignupForm() {
+  const { mutateAsync: signup, isPending } = useSignupMutation();
+
   const form = useForm<SignupSchema>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -23,8 +27,9 @@ export default function SignupForm() {
     formState: { errors },
   } = form;
 
-  const onSubmit = (data: SignupSchema) => {
-    console.log(data);
+  const onSubmit = async (data: SignupSchema) => {
+    await signup(data);
+    form.reset();
   };
 
   return (
@@ -78,7 +83,6 @@ export default function SignupForm() {
           </p>
         )}
       </div>
-
       <p className="text-xs leading-relaxed text-gray-500">
         By creating an account, you agree to our{" "}
         <a href="" className="font-medium text-gray-600 hover:underline">
@@ -93,9 +97,10 @@ export default function SignupForm() {
 
       <Button
         type="submit"
-        className="relative inline-flex h-11 w-full shrink cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-transparent bg-neutral-900 px-3 py-2.5 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-neutral-700 transition hover:bg-neutral-800 disabled:pointer-events-none disabled:opacity-20"
+        disabled={isPending}
+        className="relative inline-flex h-11 w-full shrink cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-transparent bg-neutral-900 px-3 py-2.5 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-neutral-700 transition hover:bg-neutral-800 disabled:pointer-events-none disabled:opacity-50"
       >
-        Create Account
+        {isPending ? "Creating Account..." : "Create Account"}
         <HugeiconsIcon icon={UserAdd01Icon} className="h-4 w-4" />
       </Button>
     </form>

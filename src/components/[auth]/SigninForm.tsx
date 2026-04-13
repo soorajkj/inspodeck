@@ -7,8 +7,11 @@ import { Button } from "@base-ui/react/button";
 import { Login01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { SigninSchema, signinSchema } from "@/utils/schemas/auth";
+import { useSigninMutation } from "@/hooks/useAuthMutations";
 
 export default function SigninForm() {
+  const { mutateAsync: signin, isPending } = useSigninMutation();
+
   const form = useForm<SigninSchema>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -23,8 +26,9 @@ export default function SigninForm() {
     formState: { errors },
   } = form;
 
-  const onSubmit = (data: SigninSchema) => {
-    console.log(data);
+  const onSubmit = async (data: SigninSchema) => {
+    await signin(data);
+    form.reset();
   };
 
   return (
@@ -75,9 +79,10 @@ export default function SigninForm() {
 
       <Button
         type="submit"
-        className="relative inline-flex h-11 w-full shrink cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-transparent bg-orange-600 px-3 py-2.5 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 transition hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-20"
+        disabled={isPending}
+        className="relative inline-flex h-11 w-full shrink cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-transparent bg-orange-600 px-3 py-2.5 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 transition hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-50"
       >
-        Sign In
+        {isPending ? "Signing in..." : "Sign In"}
         <HugeiconsIcon icon={Login01Icon} className="h-4 w-4" />
       </Button>
     </form>

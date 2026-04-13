@@ -3,6 +3,7 @@ import { fonts } from "@/lib/fonts";
 import ThemeProvider from "@/components/ThemeProvider";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import { AuthProvider } from "@/components/AuthProvider";
+import Toaster from "@/components/Toaster";
 import { getSession } from "@/utils/quries/auth";
 import "@/app/globals.css";
 
@@ -25,6 +26,7 @@ export default async function Layout({ children }: LayoutProps<"/">) {
           <ReactQueryProvider>
             <AuthProvider user={user}>{children}</AuthProvider>
           </ReactQueryProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
