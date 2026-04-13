@@ -1,17 +1,16 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@base-ui/react/input";
 import { Button } from "@base-ui/react/button";
 import { UserAdd01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { SignupSchema, signupSchema } from "@/utils/schemas/auth";
-import { useSignupMutation } from "@/hooks/useAuthMutations";
+import { authClient } from "@/lib/authClient";
 
 export default function SignupForm() {
-  const { mutateAsync: signup, isPending } = useSignupMutation();
-
   const form = useForm<SignupSchema>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -28,8 +27,17 @@ export default function SignupForm() {
   } = form;
 
   const onSubmit = async (data: SignupSchema) => {
-    await signup(data);
-    form.reset();
+    await authClient.signUp.email(data, {
+      onSuccess: () => {
+        toast.success("Signed in successfully");
+        form.reset();
+      },
+      onError: (error) => {
+        toast.error("Failed to sign in", {
+          description: error.error.message,
+        });
+      },
+    });
   };
 
   return (
@@ -97,10 +105,9 @@ export default function SignupForm() {
 
       <Button
         type="submit"
-        disabled={isPending}
         className="relative inline-flex h-11 w-full shrink cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-transparent bg-neutral-900 px-3 py-2.5 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-neutral-700 transition hover:bg-neutral-800 disabled:pointer-events-none disabled:opacity-50"
       >
-        {isPending ? "Creating Account..." : "Create Account"}
+        Create account
         <HugeiconsIcon icon={UserAdd01Icon} className="h-4 w-4" />
       </Button>
     </form>

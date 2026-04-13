@@ -2,7 +2,9 @@ import { hc } from "hono/client";
 import { ApiType } from "@/api";
 
 export const hrpc = hc<ApiType>(process.env.NEXT_PUBLIC_BASE_URL as string, {
-  init: { credentials: "include" },
+  init: {
+    credentials: "include",
+  },
   headers: async () => {
     if (typeof window !== "undefined") return {};
     const { headers } = await import("next/headers");

@@ -1,5 +1,5 @@
 import { hrpc } from "@/utils/hrpc";
-import { CreateComponentSchema } from "../schemas/components";
+import { CreateComponentSchema } from "@/utils/schemas/components";
 
 export const getCategories = async () => {
   const res = await hrpc.api.categories.$get();

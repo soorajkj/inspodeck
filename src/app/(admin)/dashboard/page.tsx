@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import WebsitesManager from "@/components/[admin]/WebsitesManager";
 import { getQueryClient } from "@/utils/queryClient";
@@ -6,8 +7,12 @@ import { getCategories } from "@/utils/quries/categories";
 import { getPages } from "@/utils/quries/pages";
 import { getTech } from "@/utils/quries/tech";
 import { getFonts } from "@/utils/quries/fonts";
+import { getServerSession } from "@/utils/session";
 
 export default async function page() {
+  const session = await getServerSession();
+  if (!session) redirect("/auth");
+
   const queryClient = getQueryClient();
 
   await Promise.all([

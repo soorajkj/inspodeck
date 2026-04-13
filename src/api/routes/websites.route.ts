@@ -6,6 +6,7 @@ import {
   createWebsiteWithoutImageSchema,
   updateWebsiteImageSchema,
 } from "@/utils/schemas/website";
+import { authMiddleware } from "@/api/middlewares/auth.middleware";
 
 export const websitesRoute = hono
   .createApp()
@@ -45,41 +46,46 @@ export const websitesRoute = hono
 
     return c.json(result);
   })
-  .post("/", zValidator("json", createWebsiteWithoutImageSchema), async (c) => {
-    const db = c.get("prisma");
-    const form = c.req.valid("json");
-    const result = await db.website.create({
-      data: {
-        title: form.title,
-        url: form.url,
-        description: form.description,
-        categories: {
-          create: [...new Set(form.categoryIds)].map((id) => ({
-            category: { connect: { id } },
-          })),
+  .post(
+    "/",
+    authMiddleware,
+    zValidator("json", createWebsiteWithoutImageSchema),
+    async (c) => {
+      const db = c.get("prisma");
+      const form = c.req.valid("json");
+      const result = await db.website.create({
+        data: {
+          title: form.title,
+          url: form.url,
+          description: form.description,
+          categories: {
+            create: [...new Set(form.categoryIds)].map((id) => ({
+              category: { connect: { id } },
+            })),
+          },
+          pages: {
+            create: [...new Set(form.pageIds)].map((id) => ({
+              page: { connect: { id } },
+            })),
+          },
+          tech: {
+            create:
+              [...new Set(form.techIds)]?.map((id) => ({
+                tech: { connect: { id } },
+              })) || [],
+          },
+          fonts: {
+            create:
+              [...new Set(form.fontIds)]?.map((id) => ({
+                font: { connect: { id } },
+              })) || [],
+          },
         },
-        pages: {
-          create: [...new Set(form.pageIds)].map((id) => ({
-            page: { connect: { id } },
-          })),
-        },
-        tech: {
-          create:
-            [...new Set(form.techIds)]?.map((id) => ({
-              tech: { connect: { id } },
-            })) || [],
-        },
-        fonts: {
-          create:
-            [...new Set(form.fontIds)]?.map((id) => ({
-              font: { connect: { id } },
-            })) || [],
-        },
-      },
-    });
+      });
 
-    return c.json(result);
-  })
+      return c.json(result);
+    }
+  )
   .patch(
     "/:id/image",
     bodyLimit({ maxSize: 5 * 1024 * 1024 }),

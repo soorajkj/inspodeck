@@ -4,14 +4,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@base-ui/react/input";
 import { Button } from "@base-ui/react/button";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Login01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { SigninSchema, signinSchema } from "@/utils/schemas/auth";
-import { useSigninMutation } from "@/hooks/useAuthMutations";
+import { authClient } from "@/lib/authClient";
 
 export default function SigninForm() {
-  const { mutateAsync: signin, isPending } = useSigninMutation();
-
+  const router = useRouter();
   const form = useForm<SigninSchema>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -27,8 +28,18 @@ export default function SigninForm() {
   } = form;
 
   const onSubmit = async (data: SigninSchema) => {
-    await signin(data);
-    form.reset();
+    await authClient.signIn.email(data, {
+      onSuccess: () => {
+        toast.success("Signed in successfully");
+        form.reset();
+        router.push("/");
+      },
+      onError: (error) => {
+        toast.error("Failed to sign in", {
+          description: error.error.message,
+        });
+      },
+    });
   };
 
   return (
@@ -76,13 +87,11 @@ export default function SigninForm() {
           </p>
         )}
       </div>
-
       <Button
         type="submit"
-        disabled={isPending}
         className="relative inline-flex h-11 w-full shrink cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-transparent bg-orange-600 px-3 py-2.5 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 transition hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-50"
       >
-        {isPending ? "Signing in..." : "Sign In"}
+        Sign In
         <HugeiconsIcon icon={Login01Icon} className="h-4 w-4" />
       </Button>
     </form>

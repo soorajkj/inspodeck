@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
+import { createTheme } from "ssr-themes";
+import { bindTheme } from "ssr-themes/react";
 import { fonts } from "@/lib/fonts";
-import ThemeProvider from "@/components/ThemeProvider";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
-import { AuthProvider } from "@/components/AuthProvider";
 import Toaster from "@/components/Toaster";
-import { getSession } from "@/utils/quries/auth";
 import "@/app/globals.css";
+
+const { options } = createTheme({
+  themes: ["light", "dark"],
+  attribute: "class",
+  defaultTheme: "system",
+});
+
+const { ThemeProvider } = bindTheme(options);
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,19 +20,11 @@ export const metadata: Metadata = {
 };
 
 export default async function Layout({ children }: LayoutProps<"/">) {
-  const user = await getSession();
-
   return (
     <html lang="en" className={fonts} suppressHydrationWarning>
       <body className="h-full min-h-dvh w-full bg-white font-sans text-base font-normal antialiased">
-        <ThemeProvider
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ReactQueryProvider>
-            <AuthProvider user={user}>{children}</AuthProvider>
-          </ReactQueryProvider>
+        <ThemeProvider forced="light">
+          <ReactQueryProvider>{children}</ReactQueryProvider>
           <Toaster />
         </ThemeProvider>
       </body>
