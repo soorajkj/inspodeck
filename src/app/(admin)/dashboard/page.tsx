@@ -11,7 +11,8 @@ import { getServerSession } from "@/utils/session";
 
 export default async function page() {
   const session = await getServerSession();
-  if (!session) redirect("/auth");
+
+  if (!session) redirect("/");
 
   const queryClient = getQueryClient();
 
@@ -25,6 +26,10 @@ export default async function page() {
     queryClient.prefetchQuery({ queryKey: ["TECH"], queryFn: getTech }),
     queryClient.prefetchQuery({ queryKey: ["FONTS"], queryFn: getFonts }),
   ]);
+
+  if (session.user.role !== "admin") {
+    return <div>You are not authorized to access this page</div>;
+  }
 
   return (
     <div>

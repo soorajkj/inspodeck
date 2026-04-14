@@ -1,4 +1,5 @@
 import CreateWebsite from "./CreateWebsite";
+import Signout from "./Signout";
 import Websites from "./Websites";
 
 export default function WebsitesManager() {
@@ -15,6 +16,7 @@ export default function WebsitesManager() {
             </p>
           </div>
           <CreateWebsite />
+          <Signout />
         </div>
       </div>
       <div className="mt-12 grid grid-cols-12 gap-8">
