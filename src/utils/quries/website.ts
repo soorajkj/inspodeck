@@ -35,3 +35,17 @@ export const deleteWebsite = async (id: string) => {
   if (!res.ok) throw new Error("Failed to delete website");
   return await res.json();
 };
+
+export const toggleLike = async (id: string) => {
+  const res = await hrpc.api.websites[":id"].like.$post({
+    param: { id },
+  });
+  if (!res.ok) throw new Error("Failed to toggle like");
+  return await res.json();
+};
+
+export const getLikedWebsites = async () => {
+  const res = await hrpc.api.websites.likes.$get();
+  if (!res.ok) throw new Error("Failed to fetch liked websites");
+  return await res.json();
+};

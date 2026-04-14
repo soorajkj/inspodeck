@@ -7,12 +7,15 @@ import Image from "next/image";
 import { Route } from "next";
 import Link from "next/link";
 import { Website } from "@/types/response";
+import { useWebsitesToggleLikeMutation } from "@/hooks/useWebsitesMutations";
 
 interface WebsiteTileProps {
   website: Website;
 }
 
 export default function WebsiteTile({ website }: WebsiteTileProps) {
+  const { mutateAsync: toggleLike } = useWebsitesToggleLikeMutation();
+
   return (
     <div className="group relative flex cursor-pointer flex-col gap-2">
       <div className="relative max-w-full cursor-pointer">
@@ -22,8 +25,13 @@ export default function WebsiteTile({ website }: WebsiteTileProps) {
               <Button
                 className="relative inline-flex aspect-square size-8 shrink cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-200 bg-white/90 text-sm leading-none font-semibold whitespace-nowrap text-neutral-800 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
                 aria-label={`Add ${website.title} to liked websites`}
+                onClick={() => toggleLike(website.id)}
               >
-                <HugeiconsIcon icon={FavouriteIcon} />
+                <HugeiconsIcon
+                  icon={FavouriteIcon}
+                  color={website.isLiked ? "red" : "currentColor"}
+                  fill={website.isLiked ? "red" : "currentColor"}
+                />
               </Button>
             </div>
           </div>

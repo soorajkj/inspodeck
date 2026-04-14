@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -23,6 +22,7 @@ model User {
   banned     Boolean?  @default(false)
   banReason  String?
   banExpires DateTime?
+  likes      Like[]
 
   @@unique([email])
   @@map("user")
@@ -92,6 +92,7 @@ model Website {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  likes     Like[]
 
   @@map("website")
 }
@@ -166,4 +167,16 @@ model WebsiteFont {
 
   @@id([websiteId, fontId])
   @@map("website_font")
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  website   Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, websiteId])
+  @@map("like")
 }

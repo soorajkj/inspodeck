@@ -1,29 +1,25 @@
-import { redirect } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import Hero from "@/components/[site]/Hero";
-import WebsitesGrid from "@/components/[site]/WebsitesGrid";
+import { redirect } from "next/navigation";
+import LinkedWebsites from "@/components/[site]/LinkedWebsites";
 import { getQueryClient } from "@/utils/queryClient";
-import { getWebsites } from "@/utils/quries/website";
+import { getLikedWebsites } from "@/utils/quries/website";
 import { getServerSession } from "@/utils/session";
 
 export default async function Page() {
   const session = await getServerSession();
-
-  if (!session) {
-    redirect("/auth");
-  }
-
   const queryClient = getQueryClient();
 
-  await Promise.all([
-    queryClient.prefetchQuery({ queryKey: ["WEBSITES"], queryFn: getWebsites }),
-  ]);
+  if (!session) redirect("/auth");
+
+  await queryClient.prefetchQuery({
+    queryKey: ["LIKED_WEBSITES"],
+    queryFn: getLikedWebsites,
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <main>
-        <Hero />
-        <WebsitesGrid />
+        <LinkedWebsites />
       </main>
     </HydrationBoundary>
   );
