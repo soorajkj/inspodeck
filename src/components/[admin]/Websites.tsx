@@ -18,9 +18,9 @@ import { Button } from "@base-ui/react/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useWebsitesQuery } from "@/hooks/useWebsitesQuery";
 import { useWebsitesDeleteMutation } from "@/hooks/useWebsitesMutations";
-import { TWebsite } from "@/types/response";
+import { Website } from "@/types/response";
 
-const columnHelper = createColumnHelper<TWebsite>();
+const columnHelper = createColumnHelper<Website>();
 
 export default function Websites() {
   const { data: websites = [] } = useWebsitesQuery();
