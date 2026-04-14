@@ -5,6 +5,7 @@ import {
   type QueryClientProviderProps,
 } from "@tanstack/react-query";
 import { getQueryClient } from "@/utils/queryClient";
+import ErrorBoundry from "./ErrorBoundary";
 
 type ReactQueryProviderProps = Omit<QueryClientProviderProps, "client">;
 
@@ -14,6 +15,8 @@ export default function ReactQueryProvider({
   const queryClient = getQueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ErrorBoundry>{children}</ErrorBoundry>
+    </QueryClientProvider>
   );
 }

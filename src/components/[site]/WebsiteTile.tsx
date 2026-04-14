@@ -6,13 +6,13 @@ import { ArrowUpRight03Icon, FavouriteIcon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import { Route } from "next";
 import Link from "next/link";
-import { TWebsite } from "@/types/response";
+import { Website } from "@/types/response";
 
-interface WebsiteProps {
-  website: TWebsite;
+interface WebsiteTileProps {
+  website: Website;
 }
 
-export default function Website({ website }: WebsiteProps) {
+export default function WebsiteTile({ website }: WebsiteTileProps) {
   return (
     <div className="group relative flex cursor-pointer flex-col gap-2">
       <div className="relative max-w-full cursor-pointer">
@@ -32,9 +32,10 @@ export default function Website({ website }: WebsiteProps) {
               alt={website.title}
               src={website.image || "/preview.jpg"}
               loading="eager"
+              fetchPriority="high"
               className="size-full"
-              width={600}
-              height={600}
+              width={200}
+              height={200}
             />
           </div>
         </div>

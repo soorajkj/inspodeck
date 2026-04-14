@@ -1,6 +1,6 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import Hero from "@/components/[site]/Hero";
-import Websites from "@/components/[site]/Websites";
+import WebsitesGrid from "@/components/[site]/WebsitesGrid";
 import { getQueryClient } from "@/utils/queryClient";
 import { getWebsites } from "@/utils/quries/website";
 
@@ -15,7 +15,7 @@ export default async function Page() {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <main>
         <Hero />
-        <Websites />
+        <WebsitesGrid />
       </main>
     </HydrationBoundary>
   );
