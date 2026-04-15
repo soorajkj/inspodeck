@@ -8,7 +8,6 @@ import { Input } from "@base-ui/react/input";
 import { Button } from "@base-ui/react/button";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useWebsitesCreateMutation } from "@/hooks/useWebsitesMutations";
 import {
   createWebsiteWithoutImageSchema,
   CreateWebsiteWithoutImageSchema,
@@ -19,6 +18,7 @@ import {
   useTechQuery,
   useFontsQuery,
 } from "@/hooks/useComponentsQuery";
+import { useAdminWebsiteCreateMutation } from "@/hooks/useAdminMutations";
 import UploadImageForm from "./UploadImageForm";
 
 type Step = "details" | "thumbnail";
@@ -29,7 +29,7 @@ export default function CreateWebsite() {
   const [createdId, setCreatedId] = useState<string | null>(null);
 
   const { mutateAsync: createWebsite, isPending: isCreating } =
-    useWebsitesCreateMutation();
+    useAdminWebsiteCreateMutation();
 
   const { data: categories = [] } = useCategoriesQuery();
   const { data: pages = [] } = usePagesQuery();

@@ -21,6 +21,14 @@ export type CreateWebsiteWithoutImageSchema = z.infer<
   typeof createWebsiteWithoutImageSchema
 >;
 
+export const updateWebsiteWithoutImageSchema = createWebsiteSchema.omit({
+  image: true,
+});
+
+export type UpdateWebsiteWithoutImageSchema = z.infer<
+  typeof updateWebsiteWithoutImageSchema
+>;
+
 export const updateWebsiteImageSchema = createWebsiteSchema.pick({
   image: true,
 });

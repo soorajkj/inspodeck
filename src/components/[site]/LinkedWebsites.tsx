@@ -6,7 +6,7 @@ import WebsiteGridSkeleton from "./WebsiteGridSkeleton";
 import WebsiteTile from "./WebsiteTile";
 
 export default function LinkedWebsites() {
-  const { data: websites } = useLikedWebsitesQuery();
+  const { data: websites = [] } = useLikedWebsitesQuery();
 
   return (
     <section className="relative overflow-hidden">

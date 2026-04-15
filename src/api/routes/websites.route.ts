@@ -1,16 +1,12 @@
-import { zValidator } from "@hono/zod-validator";
-import { bodyLimit } from "hono/body-limit";
-import { encodeBase64 } from "hono/utils/encode";
+import z from "zod";
 import { hono } from "@/lib/hono";
-import {
-  createWebsiteWithoutImageSchema,
-  updateWebsiteImageSchema,
-} from "@/utils/schemas/website";
 import { authMiddleware } from "@/api/middlewares/auth.middleware";
+import { optAuthMiddleware } from "@/api/middlewares/optAuth.middleware";
+import { validator } from "@/api/utils/validator";
 
 export const websitesRoute = hono
   .createApp()
-  .get("/", authMiddleware, async (c) => {
+  .get("/", optAuthMiddleware, async (c) => {
     const db = c.get("prisma");
     const user = c.get("user");
 
@@ -60,166 +56,47 @@ export const websitesRoute = hono
     return c.json(result);
   })
   .post(
-    "/",
+    "/:id/like",
     authMiddleware,
-    zValidator("json", createWebsiteWithoutImageSchema),
+    validator(
+      "param",
+      z.object({
+        id: z.string(),
+      })
+    ),
     async (c) => {
       const db = c.get("prisma");
-      const form = c.req.valid("json");
-      const result = await db.website.create({
+      const { id } = c.req.valid("param");
+      const user = c.get("user");
+
+      const existing = await db.like.findUnique({
+        where: {
+          userId_websiteId: {
+            userId: user!.id,
+            websiteId: id,
+          },
+        },
+      });
+
+      if (existing) {
+        await db.like.delete({
+          where: { id: existing.id },
+        });
+      } else {
+        await db.like.create({
+          data: {
+            userId: user!.id,
+            websiteId: id,
+          },
+        });
+      }
+
+      return c.json({
+        success: true,
+        message: "Like toggled successfully",
         data: {
-          title: form.title,
-          url: form.url,
-          description: form.description,
-          categories: {
-            create: [...new Set(form.categoryIds)].map((id) => ({
-              category: { connect: { id } },
-            })),
-          },
-          pages: {
-            create: [...new Set(form.pageIds)].map((id) => ({
-              page: { connect: { id } },
-            })),
-          },
-          tech: {
-            create:
-              [...new Set(form.techIds)]?.map((id) => ({
-                tech: { connect: { id } },
-              })) || [],
-          },
-          fonts: {
-            create:
-              [...new Set(form.fontIds)]?.map((id) => ({
-                font: { connect: { id } },
-              })) || [],
-          },
+          liked: !existing,
         },
       });
-
-      return c.json(result);
     }
-  )
-  .patch(
-    "/:id/image",
-    bodyLimit({ maxSize: 5 * 1024 * 1024 }),
-    zValidator("form", updateWebsiteImageSchema),
-    async (c) => {
-      const db = c.get("prisma");
-      const id = c.req.param("id");
-      const cloudinary = c.get("cloudinary");
-      const body = c.req.valid("form");
-
-      // Upload new image using website ID as the public_id
-      const file = body.image;
-      const arrayBuffer = await file.arrayBuffer();
-      const base46 = encodeBase64(arrayBuffer);
-      const image = `data:image/png;base64,${base46}`;
-      const result = await cloudinary.uploader.upload(image, {
-        public_id: id,
-        overwrite: true,
-        invalidate: true,
-      });
-
-      // Update database
-      await db.website.update({
-        where: { id },
-        data: { image: result.secure_url },
-      });
-      return c.json(result);
-    }
-  )
-  .delete("/:id", async (c) => {
-    const db = c.get("prisma");
-    const id = c.req.param("id");
-    const cloudinary = c.get("cloudinary");
-
-    // Delete image from Cloudinary using the website ID as public_id
-    await cloudinary.uploader.destroy(id);
-
-    // Delete from database
-    const result = await db.website.delete({
-      where: { id },
-    });
-
-    return c.json(result);
-  })
-  .post("/:id/like", authMiddleware, async (c) => {
-    const db = c.get("prisma");
-    const id = c.req.param("id");
-    const user = c.get("user");
-
-    const existingLike = await db.like.findUnique({
-      where: {
-        userId_websiteId: {
-          userId: user.id,
-          websiteId: id,
-        },
-      },
-    });
-
-    if (existingLike) {
-      await db.like.delete({
-        where: { id: existingLike.id },
-      });
-      return c.json({ liked: false });
-    }
-
-    await db.like.create({
-      data: {
-        userId: user.id,
-        websiteId: id,
-      },
-    });
-
-    return c.json({ liked: true });
-  })
-  .get("/likes", authMiddleware, async (c) => {
-    const db = c.get("prisma");
-    const user = c.get("user");
-
-    const data = await db.website.findMany({
-      where: {
-        likes: {
-          some: {
-            userId: user.id,
-          },
-        },
-      },
-      include: {
-        categories: {
-          include: { category: true },
-        },
-        pages: {
-          include: { page: true },
-        },
-        tech: {
-          include: { tech: true },
-        },
-        fonts: {
-          include: { font: true },
-        },
-        _count: {
-          select: { likes: true },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    const result = data.map((site) => ({
-      id: site.id,
-      title: site.title,
-      url: site.url,
-      description: site.description,
-      image: site.image,
-      categories: site.categories.map((c) => c.category.name),
-      pages: site.pages.map((p) => p.page.name),
-      tech: site.tech.map((t) => t.tech.name),
-      fonts: site.fonts.map((f) => f.font.name),
-      likeCount: site._count.likes,
-      isLiked: true,
-    }));
-
-    return c.json(result);
-  });
+  );

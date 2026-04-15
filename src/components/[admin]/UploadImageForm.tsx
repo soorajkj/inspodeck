@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Image01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@base-ui/react/button";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useWebsitesUpdateThumbnailMutation } from "@/hooks/useWebsitesMutations";
+import { useAdminWebsiteUpdateImageMutation } from "@/hooks/useAdminMutations";
 
 interface UploadImageFormProps {
   websiteId: string;
@@ -22,7 +22,7 @@ export default function UploadImageForm({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const { mutateAsync, isPending: isUploading } =
-    useWebsitesUpdateThumbnailMutation();
+    useAdminWebsiteUpdateImageMutation();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

@@ -6,14 +6,16 @@ import { ArrowUpRight03Icon, FavouriteIcon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import { Route } from "next";
 import Link from "next/link";
-import { Website } from "@/types/response";
 import { useWebsitesToggleLikeMutation } from "@/hooks/useWebsitesMutations";
+import { LikedWebsite, Website } from "@/types/response";
 
-interface WebsiteTileProps {
-  website: Website;
+interface WebsiteTileProps<T> {
+  website: T;
 }
 
-export default function WebsiteTile({ website }: WebsiteTileProps) {
+export default function WebsiteTile<T extends Website | LikedWebsite>({
+  website,
+}: WebsiteTileProps<T>) {
   const { mutateAsync: toggleLike } = useWebsitesToggleLikeMutation();
 
   return (

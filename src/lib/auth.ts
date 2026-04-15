@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { admin } from "better-auth/plugins";
+import { admin, openAPI } from "better-auth/plugins";
 import { prisma } from "@/lib/prisma";
 
 export const auth = betterAuth({
@@ -9,6 +9,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    autoSignIn: false,
   },
   session: {
     cookieCache: {
@@ -16,5 +17,6 @@ export const auth = betterAuth({
       maxAge: 5 * 60, // Cache duration in seconds
     },
   },
-  plugins: [admin()],
+  trustedOrigins: ["chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld"],
+  plugins: [openAPI(), admin()],
 });

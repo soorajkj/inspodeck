@@ -1,38 +1,8 @@
 import { hrpc } from "@/utils/hrpc";
-import {
-  CreateWebsiteWithoutImageSchema,
-  UpdateWebsiteImageSchema,
-} from "@/utils/schemas/website";
 
 export const getWebsites = async () => {
   const res = await hrpc.api.websites.$get();
   if (!res.ok) throw new Error("Failed to fecth websites");
-  return await res.json();
-};
-
-export const createWebsite = async (json: CreateWebsiteWithoutImageSchema) => {
-  const res = await hrpc.api.websites.$post({ json });
-  if (!res.ok) throw new Error("Failed to create website");
-  return await res.json();
-};
-
-export const updateWebsiteThumbnail = async (
-  id: string,
-  data: UpdateWebsiteImageSchema
-) => {
-  const res = await hrpc.api.websites[":id"].image.$patch({
-    param: { id },
-    form: data,
-  });
-  if (!res.ok) throw new Error("Failed to upload image");
-  return await res.json();
-};
-
-export const deleteWebsite = async (id: string) => {
-  const res = await hrpc.api.websites[":id"].$delete({
-    param: { id },
-  });
-  if (!res.ok) throw new Error("Failed to delete website");
   return await res.json();
 };
 
@@ -45,7 +15,7 @@ export const toggleLike = async (id: string) => {
 };
 
 export const getLikedWebsites = async () => {
-  const res = await hrpc.api.websites.likes.$get();
+  const res = await hrpc.api.me.likes.$get();
   if (!res.ok) throw new Error("Failed to fetch liked websites");
   return await res.json();
 };
