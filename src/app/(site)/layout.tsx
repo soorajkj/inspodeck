@@ -1,13 +1,13 @@
+import { Fragment } from "react";
 import Footer from "@/components/[site]/Footer";
 import Header from "@/components/[site]/Header";
-import LenisProvider from "@/components/LenisProvider";
 
 export default function Layout({ children }: LayoutProps<"/">) {
   return (
-    <LenisProvider>
+    <Fragment>
       <Header />
       {children}
       <Footer />
-    </LenisProvider>
+    </Fragment>
   );
 }

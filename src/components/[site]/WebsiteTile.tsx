@@ -8,6 +8,7 @@ import { Route } from "next";
 import Link from "next/link";
 import { useWebsitesToggleLikeMutation } from "@/hooks/useWebsitesMutations";
 import { LikedWebsite, Website } from "@/types/response";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface WebsiteTileProps<T> {
   website: T;
@@ -17,6 +18,7 @@ export default function WebsiteTile<T extends Website | LikedWebsite>({
   website,
 }: WebsiteTileProps<T>) {
   const { mutateAsync: toggleLike } = useWebsitesToggleLikeMutation();
+  const { requireAuth } = useRequireAuth();
 
   return (
     <div className="group relative flex cursor-pointer flex-col gap-2">
@@ -25,9 +27,14 @@ export default function WebsiteTile<T extends Website | LikedWebsite>({
           <div className="absolute inset-0 z-10 flex h-full w-full items-start rounded opacity-0 transition-all duration-300 group-hover:opacity-100">
             <div className="flex w-full justify-end gap-2 rounded-sm p-3">
               <Button
-                className="relative inline-flex aspect-square size-8 shrink cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-200 bg-white/90 text-sm leading-none font-semibold whitespace-nowrap text-neutral-800 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+                className="relative inline-flex aspect-square size-8 shrink cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-200 bg-white/90 text-sm leading-none font-semibold whitespace-nowrap text-neutral-800 disabled:pointer-events-none disabled:opacity-90 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
                 aria-label={`Add ${website.title} to liked websites`}
-                onClick={() => toggleLike(website.id)}
+                // onClick={() => toggleLike(website.id)}
+                onClick={() => {
+                  requireAuth(async () => {
+                    toggleLike(website.id);
+                  });
+                }}
               >
                 <HugeiconsIcon
                   icon={FavouriteIcon}
@@ -61,7 +68,7 @@ export default function WebsiteTile<T extends Website | LikedWebsite>({
         </div>
         <div className="flex flex-none flex-row items-center justify-center gap-1">
           <Button
-            className="relative inline-flex aspect-square size-8 shrink cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-100 text-sm leading-none font-semibold whitespace-nowrap text-neutral-800 hover:bg-neutral-200/10 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+            className="relative inline-flex aspect-square size-8 shrink cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-100 text-sm leading-none font-semibold whitespace-nowrap text-neutral-800 hover:bg-neutral-200/10 disabled:pointer-events-none disabled:opacity-90 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
             aria-label="Visit website"
             nativeButton={false}
             render={

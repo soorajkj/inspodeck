@@ -4,6 +4,7 @@ import { bindTheme } from "ssr-themes/react";
 import { fonts } from "@/lib/fonts";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import Toaster from "@/components/Toaster";
+import { AuthDialog } from "@/components/[auth]/AuthDialog";
 import "@/app/globals.css";
 
 const { options } = createTheme({
@@ -29,6 +30,7 @@ export default async function Layout({ children }: LayoutProps<"/">) {
         <ThemeProvider forced="light">
           <ReactQueryProvider>{children}</ReactQueryProvider>
           <Toaster />
+          <AuthDialog />
         </ThemeProvider>
       </body>
     </html>

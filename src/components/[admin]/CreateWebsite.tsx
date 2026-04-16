@@ -76,7 +76,7 @@ export default function CreateWebsite() {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-orange-600 px-3 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-20">
+      <Dialog.Trigger className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-orange-600 px-3 font-sans text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-90">
         Create website
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -268,13 +268,13 @@ export default function CreateWebsite() {
               </div>
 
               <div className="mt-4 flex justify-end gap-3">
-                <Dialog.Close className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-3 text-sm leading-none font-semibold whitespace-nowrap text-neutral-950 inset-shadow-2xs inset-shadow-neutral-100 transition-all hover:bg-neutral-50 disabled:pointer-events-none disabled:opacity-20">
+                <Dialog.Close className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-3 text-sm leading-none font-semibold whitespace-nowrap text-neutral-950 inset-shadow-2xs inset-shadow-neutral-100 transition-all hover:bg-neutral-50 disabled:pointer-events-none disabled:opacity-90">
                   Cancel
                 </Dialog.Close>
                 <Button
                   type="submit"
                   disabled={isCreating}
-                  className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-orange-600 px-3 text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 transition-all hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-20"
+                  className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-orange-600 px-3 text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 transition-all hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-90"
                 >
                   {isCreating ? "Creating..." : "Continue"}
                   <HugeiconsIcon icon={ArrowRight01Icon} className="h-4 w-4" />
