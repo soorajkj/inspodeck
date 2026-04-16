@@ -21,8 +21,8 @@ export default function HeaderUserActions() {
 
   return (
     <Menu.Root>
-      <Menu.Trigger className="flex h-9 cursor-pointer items-center justify-center gap-1.5 text-base leading-none font-normal text-neutral-900 select-none focus:outline-none">
-        <Avatar.Root className="relative flex aspect-square size-9 shrink-0 overflow-hidden rounded-lg select-none after:absolute after:inset-0 after:rounded-lg after:border after:border-neutral-200">
+      <Menu.Trigger className="flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-neutral-200 px-1 pr-2 text-sm leading-none font-medium text-neutral-900 select-none focus:outline-none">
+        <Avatar.Root className="relative flex aspect-square size-7 shrink-0 overflow-hidden rounded-md border border-neutral-200 select-none">
           <Avatar.Image
             src={session?.user.image || undefined}
             className="aspect-square size-full rounded-full object-cover"
