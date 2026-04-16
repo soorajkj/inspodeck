@@ -17,9 +17,8 @@ export const useAdminWebsiteCreateMutation = () => {
   return useMutation({
     mutationFn: createAdminWebsite,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["ADMIN_WEBSITES", "WEBSITES"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["ADMIN_WEBSITES"] });
+      queryClient.invalidateQueries({ queryKey: ["WEBSITES"] });
     },
   });
 };
@@ -36,9 +35,8 @@ export const useAdminWebsiteUpdateWithoutImageMutation = () => {
       data: UpdateWebsiteWithoutImageSchema;
     }) => updateAdminWebsiteWithoutImage(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["ADMIN_WEBSITES", "WEBSITES"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["ADMIN_WEBSITES"] });
+      queryClient.invalidateQueries({ queryKey: ["WEBSITES"] });
     },
   });
 };
@@ -55,9 +53,8 @@ export const useAdminWebsiteUpdateImageMutation = () => {
       data: UpdateWebsiteImageSchema;
     }) => updateAdminWebsiteImage(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["ADMIN_WEBSITES", "WEBSITES"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["ADMIN_WEBSITES"] });
+      queryClient.invalidateQueries({ queryKey: ["WEBSITES"] });
     },
   });
 };
@@ -66,9 +63,9 @@ export const useAdminWebsiteDeleteMutation = () => {
   const queryClient = getQueryClient();
   return useMutation({
     mutationFn: deleteAdminWebsite,
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: ["ADMIN_WEBSITES", "WEBSITES"],
-      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ADMIN_WEBSITES"] });
+      queryClient.invalidateQueries({ queryKey: ["WEBSITES"] });
+    },
   });
 };
