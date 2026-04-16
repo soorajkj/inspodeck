@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { forbidden, unauthorized } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import WebsitesManager from "@/components/[admin]/WebsitesManager";
 import { getQueryClient } from "@/utils/queryClient";
@@ -11,12 +11,10 @@ import { getAdminWebsites } from "@/utils/quries/admin";
 
 export default async function page() {
   const session = await getServerSession();
+  const user = session && session.user;
 
-  if (!session) redirect("/");
-
-  if (session.user.role !== "admin") {
-    return <div>You are not authorized to access this page</div>;
-  }
+  if (!user) unauthorized();
+  if (user.role !== "admin") forbidden();
 
   const queryClient = getQueryClient();
 

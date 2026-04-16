@@ -139,14 +139,14 @@ export default function WebsitesTable() {
   });
 
   return (
-    <table className="w-full border-collapse text-left">
+    <table className="w-full border-collapse border border-neutral-100 text-left">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <th
                 key={header.id}
-                className="border-b border-neutral-100 bg-neutral-100 px-4 py-2 text-sm font-medium"
+                className="border-r border-b border-neutral-100 bg-neutral-50 px-4 py-2 text-sm font-medium last:border-r-0"
               >
                 {header.isPlaceholder
                   ? null

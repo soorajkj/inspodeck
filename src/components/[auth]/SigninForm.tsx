@@ -30,9 +30,8 @@ export default function SigninForm() {
   const onSubmit = async (data: SigninSchema) => {
     await authClient.signIn.email(data, {
       onSuccess: () => {
-        toast.success("Signed in successfully");
         form.reset();
-        router.push("/");
+        router.push("/admin");
       },
       onError: (error) => {
         toast.error("Failed to sign in", {
@@ -45,13 +44,13 @@ export default function SigninForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div className="space-y-2">
-        <label className="text-sm font-semibold text-gray-700">Email</label>
+        <label className="text-sm font-semibold text-neutral-700">Email</label>
         <div className="group relative">
           <Input
             type="email"
             {...register("email")}
             placeholder="name@example.com"
-            className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-3 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-3 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
           />
         </div>
         {errors.email && (
@@ -63,7 +62,7 @@ export default function SigninForm() {
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold text-gray-700">
+          <label className="text-sm font-semibold text-neutral-700">
             Password
           </label>
           <a
@@ -78,7 +77,7 @@ export default function SigninForm() {
             type="password"
             {...register("password")}
             placeholder="••••••••"
-            className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-3 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-3 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
           />
         </div>
         {errors.password && (

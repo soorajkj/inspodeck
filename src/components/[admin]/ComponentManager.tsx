@@ -29,12 +29,12 @@ function Section({
 
   return (
     <div className="flex flex-col gap-6 rounded-lg border border-neutral-200 bg-white p-4">
-      <h3 className="text-md font-bold text-gray-800">{title}</h3>
+      <h3 className="text-md font-bold text-neutral-800">{title}</h3>
       <div className="flex flex-wrap gap-2">
         {data?.map((item) => (
           <span
             key={item.id}
-            className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600"
+            className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600"
           >
             {item.name}
           </span>

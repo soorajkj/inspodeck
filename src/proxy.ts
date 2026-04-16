@@ -10,8 +10,8 @@ export default async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const url = request.url;
 
-  // unauthenticated users accesing /dashboard
-  if (!authenticated && ROUTES.DASHBOARD.test(pathname)) {
+  // unauthenticated users accesing /admin
+  if (!authenticated && ROUTES.ADMIN.test(pathname)) {
     return NextResponse.redirect(new URL("/auth", url));
   }
 
@@ -27,5 +27,5 @@ export const config = {
 const ROUTES = {
   PUBLIC: /^\/($|pricing|features|blog)(?:\/|$)/,
   AUTH: /^\/auth(?:\/|$)/,
-  DASHBOARD: /^\/dashboard(?:\/|$)/,
+  ADMIN: /^\/admin(?:\/|$)/,
 };

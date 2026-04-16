@@ -52,7 +52,7 @@ export default function UploadImageForm({
 
   return (
     <div className="flex flex-col gap-8 py-4">
-      <div className="group relative flex aspect-video w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 transition-all hover:border-orange-300 hover:bg-orange-50/30">
+      <div className="group relative flex aspect-video w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-50/50 transition-all hover:border-orange-300 hover:bg-orange-50/30">
         {previewUrl ? (
           <div className="relative h-full w-full p-2">
             <Image
@@ -77,13 +77,13 @@ export default function UploadImageForm({
             <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm transition-transform group-hover:scale-110">
               <HugeiconsIcon
                 icon={Image01Icon}
-                className="h-8 w-8 text-gray-400 group-hover:text-orange-600"
+                className="h-8 w-8 text-neutral-400 group-hover:text-orange-600"
               />
             </div>
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-neutral-900">
               Click to upload website screenshot
             </p>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-neutral-500">
               High-quality PNG or JPG up to 5MB
             </p>
             <input

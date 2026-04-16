@@ -4,7 +4,7 @@ import { bindTheme } from "ssr-themes/react";
 import { fonts } from "@/lib/fonts";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import Toaster from "@/components/Toaster";
-import { AuthDialog } from "@/components/[auth]/AuthDialog";
+import { AuthDialog } from "@/components/[site]/AuthDialog";
 import "@/app/globals.css";
 
 const { options } = createTheme({
