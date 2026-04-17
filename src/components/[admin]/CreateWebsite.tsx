@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "@base-ui/react/dialog";
 import { Input } from "@base-ui/react/input";
@@ -36,12 +36,7 @@ export default function CreateWebsite() {
   const { data: tech = [] } = useTechQuery();
   const { data: fonts = [] } = useFontsQuery();
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm<CreateWebsiteWithoutImageSchema>({
+  const form = useForm<CreateWebsiteWithoutImageSchema>({
     defaultValues: {
       title: "",
       url: "",
@@ -70,7 +65,7 @@ export default function CreateWebsite() {
     setTimeout(() => {
       setStep("details");
       setCreatedId(null);
-      reset();
+      form.reset();
     }, 300);
   };
 
@@ -105,52 +100,87 @@ export default function CreateWebsite() {
 
           {step === "details" ? (
             <form
-              onSubmit={handleSubmit(handleCreate)}
+              onSubmit={form.handleSubmit(handleCreate)}
               className="flex flex-col gap-6"
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-neutral-700">
+                  <label
+                    htmlFor="title"
+                    className="text-sm font-semibold text-neutral-700"
+                  >
                     Title
                   </label>
-                  <Input
-                    {...register("title")}
-                    placeholder="e.g. Acme"
-                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+                  <Controller
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        id="title"
+                        placeholder="e.g. Acme"
+                        className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+                      />
+                    )}
                   />
-                  {errors.title && (
+                  {form.formState.errors.title && (
                     <p className="text-xs font-medium text-red-500">
-                      {errors.title.message}
+                      {form.formState.errors.title.message}
                     </p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-neutral-700">
+                  <label
+                    htmlFor="url"
+                    className="text-sm font-semibold text-neutral-700"
+                  >
                     URL
                   </label>
-                  <Input
-                    {...register("url")}
-                    type="url"
-                    placeholder="eg: https://acme.com"
-                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+                  <Controller
+                    control={form.control}
+                    name="url"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        id="url"
+                        type="url"
+                        placeholder="eg: https://acme.com"
+                        className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+                      />
+                    )}
                   />
-                  {errors.url && (
+                  {form.formState.errors.url && (
                     <p className="text-xs font-medium text-red-500">
-                      {errors.url.message}
+                      {form.formState.errors.url.message}
                     </p>
                   )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-neutral-700">
+                <label
+                  htmlFor="description"
+                  className="text-sm font-semibold text-neutral-700"
+                >
                   Description (optional)
                 </label>
-                <textarea
-                  {...register("description")}
-                  placeholder="A short description of the website..."
-                  className="h-24 w-full resize-none rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+                <Controller
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <textarea
+                      {...field}
+                      id="description"
+                      placeholder="A short description of the website..."
+                      className="h-24 w-full resize-none rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-2.5 text-sm transition-all focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-500/10 focus:outline-none"
+                    />
+                  )}
                 />
+                {form.formState.errors.description && (
+                  <p className="text-xs font-medium text-red-500">
+                    {form.formState.errors.description.message}
+                  </p>
+                )}
               </div>
 
               <div className="grid gap-6 sm:grid-cols-2">
@@ -167,7 +197,7 @@ export default function CreateWebsite() {
                         <input
                           type="checkbox"
                           value={c.id}
-                          {...register("categoryIds")}
+                          {...form.register("categoryIds")}
                           className="peer hidden"
                         />
                         <div className="h-4 w-4 rounded border border-neutral-300 transition-all peer-checked:border-orange-600 peer-checked:bg-orange-600" />
@@ -177,9 +207,9 @@ export default function CreateWebsite() {
                       </label>
                     ))}
                   </div>
-                  {errors.categoryIds && (
+                  {form.formState.errors.categoryIds && (
                     <p className="text-xs font-medium text-red-500">
-                      {errors.categoryIds.message}
+                      {form.formState.errors.categoryIds.message}
                     </p>
                   )}
                 </div>
@@ -197,7 +227,7 @@ export default function CreateWebsite() {
                         <input
                           type="checkbox"
                           value={p.id}
-                          {...register("pageIds")}
+                          {...form.register("pageIds")}
                           className="peer hidden"
                         />
                         <div className="h-4 w-4 rounded border border-neutral-300 transition-all peer-checked:border-orange-600 peer-checked:bg-orange-600" />
@@ -207,9 +237,9 @@ export default function CreateWebsite() {
                       </label>
                     ))}
                   </div>
-                  {errors.pageIds && (
+                  {form.formState.errors.pageIds && (
                     <p className="text-xs font-medium text-red-500">
-                      {errors.pageIds.message}
+                      {form.formState.errors.pageIds.message}
                     </p>
                   )}
                 </div>
@@ -229,7 +259,7 @@ export default function CreateWebsite() {
                         <input
                           type="checkbox"
                           value={t.id}
-                          {...register("techIds")}
+                          {...form.register("techIds")}
                           className="peer hidden"
                         />
                         <div className="h-4 w-4 rounded border border-neutral-300 transition-all peer-checked:border-orange-600 peer-checked:bg-orange-600" />
@@ -254,7 +284,7 @@ export default function CreateWebsite() {
                         <input
                           type="checkbox"
                           value={f.id}
-                          {...register("fontIds")}
+                          {...form.register("fontIds")}
                           className="peer hidden"
                         />
                         <div className="h-4 w-4 rounded border border-neutral-300 transition-all peer-checked:border-orange-600 peer-checked:bg-orange-600" />

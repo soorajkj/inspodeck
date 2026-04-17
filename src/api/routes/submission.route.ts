@@ -2,12 +2,12 @@ import normalizeUrl from "normalize-url";
 import { hono } from "@/lib/hono";
 import { authMiddleware } from "@/api/middlewares/auth.middleware";
 import { validator } from "@/api/utils/validator";
-import { submissionSchema } from "@/utils/schemas/submissions";
+import { createSubmissionSchema } from "@/utils/schemas/submissions";
 
 export const submissionsRoute = hono
   .createApp()
   .use(authMiddleware)
-  .post("/", validator("json", submissionSchema), async (c) => {
+  .post("/", validator("json", createSubmissionSchema), async (c) => {
     const user = c.get("user");
     const db = c.get("prisma");
     const json = c.req.valid("json");

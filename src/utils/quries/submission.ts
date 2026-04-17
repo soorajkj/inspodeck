@@ -1,7 +1,7 @@
 import { hrpc } from "@/utils/hrpc";
-import { SubmissionData } from "@/utils/schemas/submissions";
+import { CreateSubmissionSchema } from "@/utils/schemas/submissions";
 
-export const createSubmission = async (data: SubmissionData) => {
+export const createSubmission = async (data: CreateSubmissionSchema) => {
   const res = await hrpc.api.submissions.$post({ json: data });
   if (!res.ok) throw new Error("Failed to submit website");
   return await res.json();
