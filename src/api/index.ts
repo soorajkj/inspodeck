@@ -6,6 +6,7 @@ import { techRoute } from "@/api/routes/tech.route";
 import { fontsRoute } from "@/api/routes/fonts.route";
 import { authRoute } from "@/api/routes/auth.route";
 import { adminRoute } from "@/api/routes/admin.route";
+import { submissionsRoute } from "@/api/routes/submission.route";
 import { meRoute } from "@/api/routes/me.route";
 import { handleError } from "@/api/utils/error";
 
@@ -14,6 +15,7 @@ export const api = hono
   .basePath("/api")
   .route("/auth", authRoute)
   .route("/admin", adminRoute)
+  .route("/submissions", submissionsRoute)
   .route("/websites", websitesRoute)
   .route("/me", meRoute)
   .route("/categories", categoriesRoute)

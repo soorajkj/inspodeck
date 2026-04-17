@@ -18,11 +18,13 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role       String?
-  banned     Boolean?  @default(false)
-  banReason  String?
-  banExpires DateTime?
-  likes      Like[]
+  role                 String?
+  banned               Boolean?     @default(false)
+  banReason            String?
+  banExpires           DateTime?
+  likes                Like[]
+  submittedSubmissions Submission[] @relation("SubmittedBy")
+  reviewedSubmissions  Submission[] @relation("ReviewedBy")
 
   @@unique([email])
   @@map("user")
@@ -179,4 +181,28 @@ model Like {
 
   @@unique([userId, websiteId])
   @@map("like")
+}
+
+model Submission {
+  id            String           @id @default(cuid())
+  url           String
+  title         String
+  description   String?
+  status        SubmissionStatus @default(PENDING)
+  submittedBy   User             @relation("SubmittedBy", fields: [submittedById], references: [id], onDelete: Cascade)
+  submittedById String
+  reviewedBy    User?            @relation("ReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedById  String?
+  reviewNotes   String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@index([status])
+  @@map("submission")
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

@@ -53,4 +53,23 @@ export const meRoute = hono
     } catch (error) {
       throw error;
     }
+  })
+  .get("/submissions", async (c) => {
+    const db = c.get("prisma");
+    const user = c.get("user");
+
+    try {
+      const submissions = await db.submission.findMany({
+        where: {
+          submittedById: user!.id,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      return c.json(submissions);
+    } catch (error) {
+      throw error;
+    }
   });

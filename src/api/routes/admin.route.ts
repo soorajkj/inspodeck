@@ -1,5 +1,6 @@
 import { bodyLimit } from "hono/body-limit";
 import { encodeBase64 } from "hono/utils/encode";
+import normalizeUrl from "normalize-url";
 import { hono } from "@/lib/hono";
 import {
   createWebsiteWithoutImageSchema,
@@ -68,11 +69,17 @@ export const adminRoute = hono
       const db = c.get("prisma");
       const json = c.req.valid("json");
 
+      const normalizedUrl = normalizeUrl(json.url, {
+        stripHash: true,
+        removeQueryParameters: true,
+        removePath: true,
+      });
+
       try {
         const result = await db.website.create({
           data: {
             title: json.title,
-            url: json.url,
+            url: normalizedUrl,
             description: json.description,
             categories: {
               create: [...new Set(json.categoryIds)].map((id) => ({
@@ -126,10 +133,19 @@ export const adminRoute = hono
       const { id } = c.req.param();
       const json = c.req.valid("json");
 
+      const normalizedUrl = normalizeUrl(json.url, {
+        stripHash: true,
+        removeQueryParameters: true,
+        removePath: true,
+      });
+
       try {
         const result = await db.website.update({
           where: { id },
-          data: json,
+          data: {
+            ...json,
+            url: normalizedUrl,
+          },
         });
 
         return c.json(result);
