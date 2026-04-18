@@ -96,7 +96,7 @@ export default function Footer() {
                   <li>
                     <Link
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
+                      href="/submissions"
                     >
                       Submit
                     </Link>
@@ -104,7 +104,7 @@ export default function Footer() {
                   <li>
                     <Link
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
+                      href="/legal/privacy-policy"
                     >
                       Privacy Policy
                     </Link>
@@ -112,7 +112,7 @@ export default function Footer() {
                   <li>
                     <Link
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
+                      href="/legal/terms-of-service"
                     >
                       Terms of Service
                     </Link>
@@ -150,7 +150,7 @@ export default function Footer() {
                   <li>
                     <Link
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/"
+                      href="/about"
                     >
                       About
                     </Link>

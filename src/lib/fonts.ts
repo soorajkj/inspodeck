@@ -1,4 +1,4 @@
-import { Syne, Geist_Mono } from "next/font/google";
+import { Syne, Geist_Mono, DM_Serif_Text } from "next/font/google";
 
 const sans = Syne({
   variable: "--font-sans",
@@ -16,6 +16,14 @@ const mono = Geist_Mono({
   adjustFontFallback: true,
 });
 
+const display = DM_Serif_Text({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+  adjustFontFallback: true,
+});
+
 const join = (items: string[]) => items.join(" ");
 
-export const fonts = join([sans.variable, mono.variable]);
+export const fonts = join([sans.variable, mono.variable, display.variable]);
