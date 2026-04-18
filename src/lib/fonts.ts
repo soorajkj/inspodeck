@@ -1,14 +1,11 @@
-import { Geist_Mono, Fustat } from "next/font/google";
+import { Syne, Geist_Mono } from "next/font/google";
 
-// -FontOnest-
-// -FontMonaSans-
-
-const sans = Fustat({
+const sans = Syne({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
   weight: "variable",
-  adjustFontFallback: true,
+  adjustFontFallback: false,
 });
 
 const mono = Geist_Mono({

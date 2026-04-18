@@ -10,7 +10,7 @@ export default function WebsitesGrid() {
 
   return (
     <section className="relative overflow-hidden">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto w-full px-4 md:px-6">
         <div className="py-24">
           <Suspense fallback={<WebsiteGridSkeleton />}>
             <div role="list" className="grid grid-cols-12 gap-x-6 gap-y-8">

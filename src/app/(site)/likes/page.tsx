@@ -1,6 +1,6 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
-import LinkedWebsites from "@/components/[site]/LinkedWebsites";
+import LinedWebsites from "@/components/[site]/LikedWebsites";
 import { getQueryClient } from "@/utils/queryClient";
 import { getLikedWebsites } from "@/utils/quries/website";
 import { getServerSession } from "@/utils/session";
@@ -19,7 +19,7 @@ export default async function Page() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <main>
-        <LinkedWebsites />
+        <LinedWebsites />
       </main>
     </HydrationBoundary>
   );

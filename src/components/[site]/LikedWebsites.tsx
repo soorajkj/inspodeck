@@ -5,12 +5,12 @@ import { useLikedWebsitesQuery } from "@/hooks/useWebsitesQuery";
 import WebsiteGridSkeleton from "./WebsiteGridSkeleton";
 import WebsiteTile from "./WebsiteTile";
 
-export default function LinkedWebsites() {
+export default function LikedWebsites() {
   const { data: websites = [] } = useLikedWebsitesQuery();
 
   return (
     <section className="relative overflow-hidden">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto w-full px-4 md:px-6">
         <div className="py-24">
           <div className="mb-6 flex flex-col">
             <h2 className="text-2xl font-semibold">Liked Websites</h2>

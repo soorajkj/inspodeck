@@ -3,8 +3,8 @@ import HeaderUtils from "./HeaderUtils";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 right-0 left-0 z-40 bg-white">
-      <div className="container mx-auto px-4">
+    <header className="sticky top-0 right-0 left-0 z-40 border-b border-neutral-100 bg-white/90 backdrop-blur-md">
+      <div className="container mx-auto w-full px-4 md:px-6">
         <div className="flex h-16 items-center gap-4">
           <div className="flex flex-1 items-center gap-4">
             <Link
@@ -56,10 +56,13 @@ export default function Header() {
                 </g>
               </svg>
             </Link>
-            <ul className="hidden items-center gap-6 text-sm font-medium text-neutral-950 lg:flex">
+            <ul className="hidden items-center gap-6 lg:flex">
               {["Websites", "Templates", "Pricing", "Resources", "Company"].map(
                 (_, i) => (
-                  <li key={i.toString()} className="cursor-pointer">
+                  <li
+                    key={i.toString()}
+                    className="cursor-pointer text-sm font-medium text-neutral-950 hover:text-orange-600"
+                  >
                     {_}
                   </li>
                 )

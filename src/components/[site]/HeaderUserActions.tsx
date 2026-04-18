@@ -14,8 +14,8 @@ export default function HeaderUserActions() {
 
   return (
     <Menu.Root>
-      <Menu.Trigger className="flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-neutral-200 px-1 pr-2 text-sm leading-none font-medium text-neutral-900 select-none focus:outline-none">
-        <Avatar.Root className="relative flex aspect-square size-7 shrink-0 overflow-hidden rounded-md border border-neutral-200 select-none">
+      <Menu.Trigger className="relative inline-flex aspect-square size-9 shrink cursor-pointer items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-neutral-200 bg-transparent text-sm leading-none font-medium whitespace-nowrap text-white hover:bg-neutral-100 disabled:pointer-events-none disabled:opacity-90 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0">
+        <Avatar.Root className="relative flex aspect-square size-full shrink-0 overflow-hidden">
           <Avatar.Image
             src={session?.user.image || undefined}
             className="aspect-square size-full object-cover"
@@ -24,7 +24,6 @@ export default function HeaderUserActions() {
             {session?.user.email.charAt(0).toUpperCase()}
           </Avatar.Fallback>
         </Avatar.Root>
-        <p>{session?.user.name}</p>
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner className="isolate z-50 outline-none" sideOffset={12}>

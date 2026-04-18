@@ -10,7 +10,7 @@ export default async function Page() {
 
   return (
     <main className="min-h-screen px-4 py-20">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto w-full px-4 md:px-6">
         <div className="grid">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
             <div className="lg:col-span-4">

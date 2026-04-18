@@ -4,7 +4,7 @@ import Websites from "./Websites";
 
 export default function WebsitesManager() {
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto w-full px-4 md:px-6">
       <div className="relative">
         <div className="flex h-16 items-center justify-between">
           <div className="space-y-1">
