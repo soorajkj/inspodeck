@@ -3,23 +3,16 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Image01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
-import { Button } from "@base-ui/react/button";
+import { Button } from "@heroui/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useAdminWebsiteUpdateImageMutation } from "@/hooks/useAdminMutations";
+import { useCreateWebsiteStore } from "@/hooks/useCreateWebisteStore";
 
-interface UploadImageFormProps {
-  websiteId: string;
-  onSuccess: () => void;
-  onSkip: () => void;
-}
-
-export default function UploadImageForm({
-  websiteId,
-  onSuccess,
-  onSkip,
-}: UploadImageFormProps) {
+export default function UploadImageForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const websiteId = useCreateWebsiteStore((state) => state.websiteId);
+  const closeAndClear = useCreateWebsiteStore((state) => state.closeAndClear);
 
   const { mutateAsync, isPending: isUploading } =
     useAdminWebsiteUpdateImageMutation();
@@ -44,7 +37,7 @@ export default function UploadImageForm({
 
     try {
       await mutateAsync({ id: websiteId, data: { image: selectedFile } });
-      onSuccess();
+      closeAndClear();
     } catch (error) {
       console.error("Failed to upload thumbnail", error);
     }
@@ -98,16 +91,12 @@ export default function UploadImageForm({
       </div>
 
       <div className="flex justify-end gap-3">
-        <Button
-          onClick={onSkip}
-          className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-4 text-sm leading-none font-semibold whitespace-nowrap text-neutral-950 inset-shadow-2xs inset-shadow-neutral-100 transition-all hover:bg-neutral-50 disabled:pointer-events-none disabled:opacity-90"
-        >
+        <Button onPress={closeAndClear} variant="outline" size="sm">
           Skip for now
         </Button>
         <Button
           onClick={handleUpload}
-          disabled={!selectedFile || isUploading}
-          className="relative inline-flex h-9 shrink cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-orange-600 px-6 text-sm leading-none font-semibold whitespace-nowrap text-white shadow inset-shadow-2xs inset-shadow-orange-400 transition-all hover:bg-orange-500 disabled:pointer-events-none disabled:opacity-90"
+          isDisabled={!selectedFile || isUploading}
         >
           Upload
         </Button>

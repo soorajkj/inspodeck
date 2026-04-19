@@ -1,20 +1,14 @@
 "use client";
 
-import { useAdminWebsitesQuery } from "@/hooks/useAdminQuery";
 import WebsitesTable from "./WebsitesTable";
+import CreateWebsite from "./CreateWebsite";
 
 export default function Websites() {
-  const { data: websites = [] } = useAdminWebsitesQuery();
-
   return (
-    <div className="w-full">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-bold text-neutral-900">
-          Websites Registry
-        </h2>
-        <span className="text-xs text-neutral-500">
-          {websites.length} total
-        </span>
+    <div className="grid w-full gap-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-neutral-900">Websites</h2>
+        <CreateWebsite />
       </div>
       <div className="overflow-x-auto">
         <WebsitesTable />

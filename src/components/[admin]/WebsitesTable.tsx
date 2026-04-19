@@ -8,9 +8,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Delete02Icon } from "@hugeicons/core-free-icons";
-import { Button } from "@base-ui/react/button";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { Button, Table } from "@heroui/react";
+import { Icon } from "@iconify/react";
 import { useAdminWebsiteDeleteMutation } from "@/hooks/useAdminMutations";
 import { AdminWebsite } from "@/types/response";
 import { useAdminWebsitesQuery } from "@/hooks/useAdminQuery";
@@ -25,13 +24,6 @@ export default function WebsitesTable() {
   const columns = [
     columnHelper.accessor("title", {
       header: "Website",
-      cell: (info) => (
-        <div className="flex flex-col">
-          <span className="text-sm font-medium text-neutral-900">
-            {info.getValue()}
-          </span>
-        </div>
-      ),
     }),
     columnHelper.accessor("url", {
       header: "Link",
@@ -40,7 +32,7 @@ export default function WebsitesTable() {
           href={info.getValue()}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-orange-600 hover:underline"
+          className="text-orange-600 hover:underline"
         >
           {new URL(info.getValue()).hostname}
         </a>
@@ -48,86 +40,34 @@ export default function WebsitesTable() {
     }),
     columnHelper.accessor("pages", {
       header: "Page",
-      cell: (info) => (
-        <div className="flex flex-wrap gap-1">
-          {info.getValue().map((page) => (
-            <span
-              key={page}
-              className="rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-700"
-            >
-              {page}
-            </span>
-          ))}
-        </div>
-      ),
     }),
     columnHelper.accessor("categories", {
       header: "Categories",
-      cell: (info) => (
-        <div className="flex flex-wrap gap-1">
-          {info.getValue().map((cat) => (
-            <span
-              key={cat}
-              className="rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-700"
-            >
-              {cat}
-            </span>
-          ))}
-        </div>
-      ),
+      cell: (info) => info.getValue().join(", "),
     }),
     columnHelper.accessor("tech", {
       header: "Tech Stack",
-      cell: (info) => (
-        <div className="flex flex-wrap gap-1">
-          {info.getValue().map((tech) => (
-            <span
-              key={tech}
-              className="rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-700"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      ),
+      cell: (info) => info.getValue().join(", "),
     }),
     columnHelper.accessor("fonts", {
       header: "Fonts",
-      cell: (info) => (
-        <div className="flex flex-wrap gap-1">
-          {info.getValue().map((font) => (
-            <span
-              key={font}
-              className="rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-700"
-            >
-              {font}
-            </span>
-          ))}
-        </div>
-      ),
+      cell: (info) => info.getValue().join(", "),
     }),
     columnHelper.accessor("likes", {
       header: "Likes",
-      cell: (info) => (
-        <span className="text-neutral-500">{info.getValue()}</span>
-      ),
     }),
     columnHelper.accessor("id", {
       header: undefined,
       cell: (info) => (
-        <div className="flex justify-end">
-          <Button
-            onClick={() => {
-              if (confirm("Are you sure you want to delete this website?")) {
-                deleteWebsite(info.getValue());
-              }
-            }}
-            disabled={isDeleting}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 transition-all hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
-          >
-            <HugeiconsIcon icon={Delete02Icon} className="h-4 w-4" />
-          </Button>
-        </div>
+        <Button
+          onClick={() => deleteWebsite(info.getValue())}
+          isDisabled={isDeleting}
+          isIconOnly={true}
+          variant="ghost"
+          size="sm"
+        >
+          <Icon icon="hugeicons:delete-01" />
+        </Button>
       ),
     }),
   ];
@@ -139,40 +79,39 @@ export default function WebsitesTable() {
   });
 
   return (
-    <table className="w-full border-collapse border border-neutral-100 text-left">
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th
+    <Table>
+      <Table.ScrollContainer>
+        <Table.Content aria-label="Websites">
+          <Table.Header>
+            {table.getHeaderGroups()[0]!.headers.map((header) => (
+              <Table.Column
                 key={header.id}
-                className="border-r border-b border-neutral-100 bg-neutral-50 px-4 py-2 text-sm font-medium last:border-r-0"
+                allowsSorting={header.column.getCanSort()}
+                id={header.id}
+                isRowHeader={header.id === "title"}
               >
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-              </th>
+                {() =>
+                  flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )
+                }
+              </Table.Column>
             ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody className="divide-y divide-neutral-100">
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id} className="transition-colors hover:bg-neutral-50/50">
-            {row.getVisibleCells().map((cell) => (
-              <td
-                key={cell.id}
-                className="border-r border-neutral-100 px-4 py-2 last:border-r-0"
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
+          </Table.Header>
+          <Table.Body>
+            {table.getRowModel().rows.map((row) => (
+              <Table.Row key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <Table.Cell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Table.Cell>
+                ))}
+              </Table.Row>
             ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+          </Table.Body>
+        </Table.Content>
+      </Table.ScrollContainer>
+    </Table>
   );
 }
