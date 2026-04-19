@@ -58,10 +58,10 @@ export default function WebsiteTile<T extends Website | LikedWebsite>({
       </div>
       <div className="relative flex items-center justify-between gap-2">
         <div className="flex grow flex-col items-start truncate">
-          <h3 className="flex items-center truncate text-sm font-medium text-neutral-950">
+          <h3 className="max-w-60 truncate text-sm font-medium text-neutral-950">
             {website.title}
           </h3>
-          <p className="truncate text-sm leading-tight text-neutral-600">
+          <p className="max-w-72 truncate text-sm leading-tight text-neutral-600">
             {[...website.categories].join(", ")}
           </p>
         </div>

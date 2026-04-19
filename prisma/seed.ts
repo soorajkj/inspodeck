@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-export const pages = [
+const PAGES = [
   "Landing",
   "Pricing",
   "About",
@@ -13,13 +13,13 @@ export const pages = [
   "Product",
   "Features",
   "Case Study",
-  "Docs",
+  "Documentation",
   "Changelog",
   "Waitlist",
   "404",
 ];
 
-export const categories = [
+const CATEGORIES = [
   "Agency & Consulting",
   "AI",
   "Analytics",
@@ -37,7 +37,6 @@ export const categories = [
   "Crypto",
   "Culture & Education",
   "Customer Support",
-  "Design",
   "Design Tools",
   "Developer Tools",
   "E-commerce",
@@ -77,8 +76,8 @@ export const categories = [
   "Web3",
 ];
 
-export const tech = [
-  "React",
+const TECHNOLOGIES = [
+  "React.js",
   "Next.js",
   "Vue.js",
   "Nuxt.js",
@@ -93,7 +92,7 @@ export const tech = [
   "GSAP",
 ];
 
-export const fonts = [
+const FONTS = [
   "Inter",
   "Helvetica",
   "Arial",
@@ -113,7 +112,7 @@ export const fonts = [
 
 async function main() {
   await Promise.all(
-    pages.map((name) =>
+    PAGES.map((name) =>
       prisma.page.upsert({
         where: { name },
         update: {},
@@ -123,7 +122,7 @@ async function main() {
   );
 
   await Promise.all(
-    categories.map((name) =>
+    CATEGORIES.map((name) =>
       prisma.category.upsert({
         where: { name },
         update: {},
@@ -133,7 +132,7 @@ async function main() {
   );
 
   await Promise.all(
-    tech.map((name) =>
+    TECHNOLOGIES.map((name) =>
       prisma.tech.upsert({
         where: { name },
         update: {},
@@ -143,7 +142,7 @@ async function main() {
   );
 
   await Promise.all(
-    fonts.map((name) =>
+    FONTS.map((name) =>
       prisma.font.upsert({
         where: { name },
         update: {},
