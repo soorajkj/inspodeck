@@ -8,6 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import Image from "next/image";
 import { Button, Table } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useAdminWebsiteDeleteMutation } from "@/hooks/useAdminMutations";
@@ -22,10 +23,23 @@ export default function WebsitesTable() {
     useAdminWebsiteDeleteMutation();
 
   const columns = [
-    columnHelper.accessor("title", {
+    columnHelper.accessor("name", {
       header: "Website",
+      cell: (info) => (
+        <div className="flex items-center gap-2">
+          <div className="overflow-hidden rounded-lg border border-neutral-100">
+            <Image
+              src={info.row.original.icon || "https://placehold.co/28.png"}
+              alt={info.row.original.name}
+              width={28}
+              height={28}
+            />
+          </div>
+          <p>{info.getValue()}</p>
+        </div>
+      ),
     }),
-    columnHelper.accessor("url", {
+    columnHelper.accessor("baseUrl", {
       header: "Link",
       cell: (info) => (
         <a
@@ -38,36 +52,24 @@ export default function WebsitesTable() {
         </a>
       ),
     }),
-    columnHelper.accessor("pages", {
-      header: "Page",
-    }),
     columnHelper.accessor("categories", {
       header: "Categories",
       cell: (info) => info.getValue().join(", "),
     }),
-    columnHelper.accessor("tech", {
-      header: "Tech Stack",
-      cell: (info) => info.getValue().join(", "),
-    }),
-    columnHelper.accessor("fonts", {
-      header: "Fonts",
-      cell: (info) => info.getValue().join(", "),
-    }),
-    columnHelper.accessor("likes", {
-      header: "Likes",
-    }),
     columnHelper.accessor("id", {
       header: undefined,
       cell: (info) => (
-        <Button
-          onClick={() => deleteWebsite(info.getValue())}
-          isDisabled={isDeleting}
-          isIconOnly={true}
-          variant="ghost"
-          size="sm"
-        >
-          <Icon icon="hugeicons:delete-01" />
-        </Button>
+        <div className="flex items-center justify-end gap-2">
+          <Button
+            onClick={() => deleteWebsite(info.getValue())}
+            isDisabled={isDeleting}
+            isIconOnly={true}
+            variant="ghost"
+            size="sm"
+          >
+            <Icon icon="hugeicons:delete-01" />
+          </Button>
+        </div>
       ),
     }),
   ];
@@ -88,7 +90,7 @@ export default function WebsitesTable() {
                 key={header.id}
                 allowsSorting={header.column.getCanSort()}
                 id={header.id}
-                isRowHeader={header.id === "title"}
+                isRowHeader={header.id === "name"}
               >
                 {() =>
                   flexRender(

@@ -37,11 +37,11 @@ export default function HeaderUserActions() {
             <Menu.Separator className="my-0.5 h-px bg-neutral-200" />
             <Menu.Item
               className="relative flex cursor-default items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium outline-hidden select-none focus:bg-neutral-100 focus:text-neutral-950 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-              render={<Link href="/submissions">Submissions</Link>}
+              render={<Link href="/">Submissions</Link>}
             />
             <Menu.Item
               className="relative flex cursor-default items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium outline-hidden select-none focus:bg-neutral-100 focus:text-neutral-950 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-              render={<Link href="/likes">Likes</Link>}
+              render={<Link href="/">Likes</Link>}
             />
             <Menu.Separator className="my-0.5 h-px bg-neutral-200" />
             <Menu.Item className="relative flex cursor-default items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium outline-hidden select-none focus:bg-neutral-100 focus:text-neutral-950 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">

@@ -1,41 +1,27 @@
 import { bodyLimit } from "hono/body-limit";
 import { encodeBase64 } from "hono/utils/encode";
 import normalizeUrl from "normalize-url";
+import { zValidator } from "@hono/zod-validator";
+import { createId } from "@paralleldrive/cuid2";
 import { hono } from "@/lib/hono";
-import {
-  createWebsiteWithoutImageSchema,
-  updateWebsiteImageSchema,
-  updateWebsiteWithoutImageSchema,
-} from "@/utils/schemas/website";
 import { authMiddleware } from "@/api/middlewares/auth.middleware";
-import { adminMiddleware } from "@/api/middlewares/admin.middleware";
-import { validator } from "@/api/utils/validator";
+import {
+  createWebsiteSchema,
+  updateWebsiteAssetsSchema,
+} from "@/utils/schemas/website";
 
 export const adminRoute = hono
   .createApp()
   .use(authMiddleware)
-  .use(adminMiddleware)
   .get("/websites", async (c) => {
     const db = c.get("prisma");
 
     try {
-      const result = await db.website.findMany({
+      const websites = await db.website.findMany({
         include: {
           categories: {
-            include: { category: true },
-          },
-          pages: {
-            include: { page: true },
-          },
-          tech: {
-            include: { tech: true },
-          },
-          fonts: {
-            include: { font: true },
-          },
-          _count: {
-            select: {
-              likes: true,
+            include: {
+              category: true,
             },
           },
         },
@@ -44,32 +30,28 @@ export const adminRoute = hono
         },
       });
 
-      const websites = result.map((w) => ({
-        id: w.id,
-        title: w.title,
-        url: w.url,
-        description: w.description,
-        image: w.image,
-        categories: w.categories.map((c) => c.category.name),
-        pages: w.pages.map((p) => p.page.name),
-        tech: w.tech.map((t) => t.tech.name),
-        fonts: w.fonts.map((f) => f.font.name),
-        likes: w._count.likes,
+      const result = websites.map((site) => ({
+        ...site,
+        categories: site.categories.map((c) => c.category.name),
       }));
 
-      return c.json(websites);
+      return c.json(result);
     } catch (error) {
       throw error;
     }
   })
   .post(
     "/websites",
-    validator("json", createWebsiteWithoutImageSchema),
+    zValidator("json", createWebsiteSchema, (r) => {
+      if (!r.success) throw r.error;
+    }),
     async (c) => {
       const db = c.get("prisma");
       const json = c.req.valid("json");
 
-      const normalizedUrl = normalizeUrl(json.url, {
+      const id = createId();
+
+      const url = normalizeUrl(json.baseUrl, {
         stripHash: true,
         removeQueryParameters: true,
         removePath: true,
@@ -78,33 +60,71 @@ export const adminRoute = hono
       try {
         const result = await db.website.create({
           data: {
-            title: json.title,
-            url: normalizedUrl,
+            id,
+            name: json.name,
+            baseUrl: url,
             description: json.description,
             categories: {
-              create: [...new Set(json.categoryIds)].map((id) => ({
-                category: { connect: { id } },
+              create: json.categories?.map((categoryId: string) => ({
+                categoryId,
               })),
-            },
-            pages: {
-              create: [...new Set(json.pageIds)].map((id) => ({
-                page: { connect: { id } },
-              })),
-            },
-            tech: {
-              create:
-                [...new Set(json.techIds)]?.map((id) => ({
-                  tech: { connect: { id } },
-                })) || [],
-            },
-            fonts: {
-              create:
-                [...new Set(json.fontIds)]?.map((id) => ({
-                  font: { connect: { id } },
-                })) || [],
             },
           },
         });
+
+        return c.json(result);
+      } catch (error) {
+        throw error;
+      }
+    }
+  )
+  .patch(
+    "/websites/:id/assests",
+    bodyLimit({ maxSize: 5 * 1024 * 1024 }),
+    zValidator("form", updateWebsiteAssetsSchema, (r) => {
+      if (!r.success) throw r.error;
+    }),
+    async (c) => {
+      try {
+        const db = c.get("prisma");
+        const cloudinary = c.get("cloudinary");
+        const { id } = c.req.param();
+        const form = c.req.valid("form");
+
+        const iconFile = form.icon;
+        const iconArrayBuffer = await iconFile.arrayBuffer();
+        const iconBase46 = encodeBase64(iconArrayBuffer);
+        const iconImage = `data:${iconFile.type};base64,${iconBase46}`;
+
+        const thumbnailFile = form.thumbnail;
+        const thumbnailArrayBuffer = await thumbnailFile.arrayBuffer();
+        const thumbnailBase46 = encodeBase64(thumbnailArrayBuffer);
+        const thumbnailImage = `data:${thumbnailFile.type};base64,${thumbnailBase46}`;
+
+        const [icon, thumbnail] = await Promise.all([
+          cloudinary.uploader.upload(iconImage, {
+            public_id: id,
+            folder: "icons",
+            overwrite: true,
+            invalidate: true,
+          }),
+
+          cloudinary.uploader.upload(thumbnailImage, {
+            public_id: id,
+            folder: "thumbnails",
+            overwrite: true,
+            invalidate: true,
+          }),
+        ]);
+
+        const result = await db.website.update({
+          where: { id },
+          data: {
+            icon: icon.secure_url,
+            thumbnail: thumbnail.secure_url,
+          },
+        });
+
         return c.json(result);
       } catch (error) {
         throw error;
@@ -125,77 +145,16 @@ export const adminRoute = hono
       throw error;
     }
   })
-  .patch(
-    "/websites/:id",
-    validator("json", updateWebsiteWithoutImageSchema),
-    async (c) => {
-      const db = c.get("prisma");
-      const { id } = c.req.param();
-      const json = c.req.valid("json");
-
-      const normalizedUrl = normalizeUrl(json.url, {
-        stripHash: true,
-        removeQueryParameters: true,
-        removePath: true,
-      });
-
-      try {
-        const result = await db.website.update({
-          where: { id },
-          data: {
-            ...json,
-            url: normalizedUrl,
-          },
-        });
-
-        return c.json(result);
-      } catch (error) {
-        throw error;
-      }
-    }
-  )
-  .patch(
-    "/websites/:id/image",
-    bodyLimit({ maxSize: 5 * 1024 * 1024 }),
-    validator("form", updateWebsiteImageSchema),
-    async (c) => {
-      const db = c.get("prisma");
-      const { id } = c.req.param();
-      const cloudinary = c.get("cloudinary");
-      const body = c.req.valid("form");
-
-      const file = body.image;
-      const arrayBuffer = await file.arrayBuffer();
-      const base46 = encodeBase64(arrayBuffer);
-      const image = `data:image/png;base64,${base46}`;
-
-      try {
-        // Upload new image using website ID as the public_id
-        const result = await cloudinary.uploader.upload(image, {
-          public_id: id,
-          overwrite: true,
-          invalidate: true,
-        });
-
-        await db.website.update({
-          where: { id },
-          data: { image: result.secure_url },
-        });
-
-        return c.json(result);
-      } catch (error) {
-        throw error;
-      }
-    }
-  )
   .delete("/websites/:id", async (c) => {
     const db = c.get("prisma");
     const { id } = c.req.param();
     const cloudinary = c.get("cloudinary");
 
     try {
-      // Delete image from Cloudinary using the website ID as public_id
-      await cloudinary.uploader.destroy(id);
+      await Promise.all([
+        cloudinary.uploader.destroy(`icons/${id}`),
+        cloudinary.uploader.destroy(`thumbnails/${id}`),
+      ]);
 
       const result = await db.website.delete({
         where: { id },
@@ -205,4 +164,17 @@ export const adminRoute = hono
     } catch (error) {
       throw error;
     }
+  })
+  .get("/categories", async (c) => {
+    const db = c.get("prisma");
+
+    const categories = await db.category.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    return c.json(categories);
   });

@@ -96,7 +96,7 @@ export default function Footer() {
                   <li>
                     <Link
                       className="text-sm font-medium text-neutral-600 transition hover:underline"
-                      href="/submissions"
+                      href="/"
                     >
                       Submit
                     </Link>

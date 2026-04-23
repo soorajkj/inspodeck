@@ -2,12 +2,8 @@ import { forbidden, unauthorized } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import WebsitesManager from "@/components/[admin]/WebsitesManager";
 import { getQueryClient } from "@/utils/queryClient";
-import { getCategories } from "@/utils/quries/categories";
-import { getPages } from "@/utils/quries/pages";
-import { getTech } from "@/utils/quries/tech";
-import { getFonts } from "@/utils/quries/fonts";
 import { getServerSession } from "@/utils/session";
-import { getAdminWebsites } from "@/utils/quries/admin";
+import { getCategories, getWebsites } from "@/utils/quries/admin";
 
 export default async function page() {
   const session = await getServerSession();
@@ -21,15 +17,12 @@ export default async function page() {
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ["ADMIN_WEBSITES"],
-      queryFn: getAdminWebsites,
+      queryFn: getWebsites,
     }),
     queryClient.prefetchQuery({
-      queryKey: ["CATEGORIES"],
+      queryKey: ["ADMIN_CATEGORIES"],
       queryFn: getCategories,
     }),
-    queryClient.prefetchQuery({ queryKey: ["PAGES"], queryFn: getPages }),
-    queryClient.prefetchQuery({ queryKey: ["TECH"], queryFn: getTech }),
-    queryClient.prefetchQuery({ queryKey: ["FONTS"], queryFn: getFonts }),
   ]);
 
   return (

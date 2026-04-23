@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "website" ALTER COLUMN "icon" DROP NOT NULL,
+ALTER COLUMN "thumbnail" DROP NOT NULL;

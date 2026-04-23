@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAdminWebsites } from "@/utils/quries/admin";
+import { getCategories, getWebsites } from "@/utils/quries/admin";
 
 export const useAdminWebsitesQuery = () => {
   return useQuery({
     queryKey: ["ADMIN_WEBSITES"],
-    queryFn: getAdminWebsites,
+    queryFn: getWebsites,
+  });
+};
+
+export const useAdminCategoriesQuery = () => {
+  return useQuery({
+    queryKey: ["ADMIN_CATEGORIES"],
+    queryFn: getCategories,
   });
 };

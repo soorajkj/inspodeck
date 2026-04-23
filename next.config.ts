@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
       {
         hostname: "res.cloudinary.com",
       },
+      {
+        hostname: "placehold.co",
+      },
     ],
   },
 };

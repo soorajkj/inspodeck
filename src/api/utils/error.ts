@@ -5,6 +5,8 @@ import { Context } from "hono";
 import { Env } from "@/types/hono";
 
 export const handleError = (err: unknown, c: Context<Env>) => {
+  console.log("ERROR", err);
+
   // HTTPException
   if (err instanceof HTTPException) {
     return c.json(

@@ -1,45 +1,59 @@
 "use client";
 
+import { Fragment } from "react";
 import { Button, Modal, Surface } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import { Step, useCreateWebsiteStore } from "@/hooks/useCreateWebisteStore";
+import { useCreateWebsiteModalStore } from "@/hooks/useCreateWebsiteModalStore";
 import CreateWebsiteForm from "./CreateWebsiteForm";
-import UploadImageForm from "./UploadImageForm";
+import UploadAssetsForm from "./UploadAssetsForm";
 
 export default function CreateWebsite() {
-  const step = useCreateWebsiteStore((state) => state.step);
-  const isOpen = useCreateWebsiteStore((state) => state.isOpen);
-  const setOpen = useCreateWebsiteStore((state) => state.setOpen);
+  const isOpen = useCreateWebsiteModalStore((s) => s.isOpen);
+  const setIsOpen = useCreateWebsiteModalStore((s) => s.setOpen);
+  const stage = useCreateWebsiteModalStore((s) => s.stage);
+  const setStage = useCreateWebsiteModalStore((s) => s.setStage);
+  const setWebsiteId = useCreateWebsiteModalStore((s) => s.setWebsiteId);
 
   return (
-    <>
-      <Button onPress={setOpen}>
+    <Fragment>
+      <Button onPress={setIsOpen}>
         <Icon icon="hugeicons:add-01" />
         Add website
       </Button>
-      <Modal.Backdrop isOpen={isOpen} onOpenChange={setOpen} isDismissable>
+      <Modal.Backdrop
+        isOpen={isOpen}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setStage("basic");
+            setWebsiteId(null);
+            setIsOpen();
+          }
+        }}
+      >
         <Modal.Container placement="auto" size="lg">
           <Modal.Dialog>
             <Modal.CloseTrigger />
             <Modal.Header>
               <Modal.Heading>Create Website</Modal.Heading>
-              <p>Fill the basic info of the website.</p>
+              <p>Fill the basic info of the website</p>
             </Modal.Header>
             <Modal.Body className="px-1 py-6">
-              <Surface variant="transparent">{renderStep(step)}</Surface>
+              <Surface variant="transparent">{renderStage(stage)}</Surface>
             </Modal.Body>
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>
-    </>
+    </Fragment>
   );
 }
 
-const renderStep = (step: Step) => {
-  switch (step) {
-    case "details":
+const renderStage = (stage: "basic" | "assets") => {
+  switch (stage) {
+    case "basic":
       return <CreateWebsiteForm />;
-    case "image":
-      return <UploadImageForm />;
+    case "assets":
+      return <UploadAssetsForm />;
+    default:
+      return null;
   }
 };

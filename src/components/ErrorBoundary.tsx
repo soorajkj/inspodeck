@@ -1,6 +1,6 @@
+import { PropsWithChildren } from "react";
 import { Button } from "@base-ui/react/button";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import { PropsWithChildren } from "react";
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 
 type ErrorBoundryProps = PropsWithChildren;

@@ -1,21 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { getQueryClient } from "@/utils/queryClient";
 import {
-  createAdminWebsite,
-  deleteAdminWebsite,
-  updateAdminWebsiteImage,
-  updateAdminWebsiteWithoutImage,
+  createWebsite,
+  deleteWebsite,
+  updateWebsiteAssets,
 } from "@/utils/quries/admin";
-import {
-  UpdateWebsiteImageSchema,
-  UpdateWebsiteWithoutImageSchema,
-} from "@/utils/schemas/website";
+import { UpdateWebsiteAssetsSchema } from "@/utils/schemas/website";
 
 export const useAdminWebsiteCreateMutation = () => {
   const queryClient = getQueryClient();
 
   return useMutation({
-    mutationFn: createAdminWebsite,
+    mutationFn: createWebsite,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ADMIN_WEBSITES"] });
       queryClient.invalidateQueries({ queryKey: ["WEBSITES"] });
@@ -23,38 +19,18 @@ export const useAdminWebsiteCreateMutation = () => {
   });
 };
 
-export const useAdminWebsiteUpdateWithoutImageMutation = () => {
+export const useAdminWebsiteAssetsUpdateMutation = () => {
   const queryClient = getQueryClient();
-
   return useMutation({
     mutationFn: ({
       id,
       data,
     }: {
       id: string;
-      data: UpdateWebsiteWithoutImageSchema;
-    }) => updateAdminWebsiteWithoutImage(id, data),
+      data: UpdateWebsiteAssetsSchema;
+    }) => updateWebsiteAssets(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ADMIN_WEBSITES"] });
-      queryClient.invalidateQueries({ queryKey: ["WEBSITES"] });
-    },
-  });
-};
-
-export const useAdminWebsiteUpdateImageMutation = () => {
-  const queryClient = getQueryClient();
-
-  return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string;
-      data: UpdateWebsiteImageSchema;
-    }) => updateAdminWebsiteImage(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ADMIN_WEBSITES"] });
-      queryClient.invalidateQueries({ queryKey: ["WEBSITES"] });
     },
   });
 };
@@ -62,7 +38,7 @@ export const useAdminWebsiteUpdateImageMutation = () => {
 export const useAdminWebsiteDeleteMutation = () => {
   const queryClient = getQueryClient();
   return useMutation({
-    mutationFn: deleteAdminWebsite,
+    mutationFn: deleteWebsite,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ADMIN_WEBSITES"] });
       queryClient.invalidateQueries({ queryKey: ["WEBSITES"] });
