@@ -8,7 +8,11 @@ export default async function Page() {
   const queryClient = getQueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({ queryKey: ["WEBSITES"], queryFn: getWebsites }),
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["WEBSITES"],
+      queryFn: ({ pageParam }) => getWebsites({ cursor: pageParam }),
+      initialPageParam: undefined,
+    }),
     queryClient.prefetchQuery({
       queryKey: ["CATEGORIES"],
       queryFn: getCategories,

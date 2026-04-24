@@ -21,3 +21,10 @@ export type UpdateWebsiteAssetsSchema = z.infer<
 >;
 
 export type CreateWebsiteSchema = z.infer<typeof createWebsiteSchema>;
+
+export const getWebsitesQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).optional(),
+  cursor: z.string().optional(),
+});
+
+export type GetWebsitesQuerySchema = z.infer<typeof getWebsitesQuerySchema>;

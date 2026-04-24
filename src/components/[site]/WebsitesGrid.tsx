@@ -1,13 +1,27 @@
 "use client";
 
-import { Suspense } from "react";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import WebsiteTile from "@/components/[site]/WebsiteTile";
 import { useWebsitesQuery } from "@/hooks/useWebsitesQuery";
-import WebsiteGridSkeleton from "./WebsiteGridSkeleton";
 import FilterBar from "./FilterBar";
+import WebsiteTileSkeleton from "./WebsiteTileSkeleton";
 
 export default function WebsitesGrid() {
-  const { data: websites = [] } = useWebsitesQuery();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useWebsitesQuery();
+
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const websites = data.pages.flatMap((page) => page.items);
 
   return (
     <section className="relative">
@@ -21,22 +35,30 @@ export default function WebsitesGrid() {
               <FilterBar />
             </div>
             <div className="flex-1">
-              <Suspense fallback={<WebsiteGridSkeleton />}>
-                <div
-                  role="list"
-                  className="grid grid-cols-12 gap-x-6 gap-y-8 py-12"
-                >
-                  {websites.map((website, i) => (
+              <div
+                role="list"
+                className="grid grid-cols-12 gap-x-6 gap-y-8 py-12"
+              >
+                {websites.map((website) => (
+                  <div
+                    key={website.id}
+                    role="listitem"
+                    className="col-span-12 sm:col-span-6 xl:col-span-4"
+                  >
+                    <WebsiteTile website={website} />
+                  </div>
+                ))}
+                {isFetchingNextPage &&
+                  [...Array(10)].map((_, i) => (
                     <div
                       key={i.toString()}
-                      role="listitem"
                       className="col-span-12 sm:col-span-6 xl:col-span-4"
                     >
-                      <WebsiteTile website={website} />
+                      <WebsiteTileSkeleton />
                     </div>
                   ))}
-                </div>
-              </Suspense>
+                <span ref={ref} />
+              </div>
             </div>
           </div>
         </div>
