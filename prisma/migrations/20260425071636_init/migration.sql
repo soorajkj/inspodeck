@@ -64,9 +64,11 @@ CREATE TABLE "verification" (
 -- CreateTable
 CREATE TABLE "website" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "url" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "baseUrl" TEXT NOT NULL,
     "description" TEXT,
+    "icon" TEXT,
+    "thumbnail" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -77,64 +79,18 @@ CREATE TABLE "website" (
 CREATE TABLE "category" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "category_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "website_category" (
+CREATE TABLE "websiteCategory" (
     "websiteId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
 
-    CONSTRAINT "website_category_pkey" PRIMARY KEY ("websiteId","categoryId")
-);
-
--- CreateTable
-CREATE TABLE "page" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "page_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "website_page" (
-    "websiteId" TEXT NOT NULL,
-    "pageId" TEXT NOT NULL,
-
-    CONSTRAINT "website_page_pkey" PRIMARY KEY ("websiteId","pageId")
-);
-
--- CreateTable
-CREATE TABLE "tech" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "tech_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "website_tech" (
-    "websiteId" TEXT NOT NULL,
-    "techId" TEXT NOT NULL,
-
-    CONSTRAINT "website_tech_pkey" PRIMARY KEY ("websiteId","techId")
-);
-
--- CreateTable
-CREATE TABLE "font" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "font_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "website_font" (
-    "websiteId" TEXT NOT NULL,
-    "fontId" TEXT NOT NULL,
-
-    CONSTRAINT "website_font_pkey" PRIMARY KEY ("websiteId","fontId")
+    CONSTRAINT "websiteCategory_pkey" PRIMARY KEY ("websiteId","categoryId")
 );
 
 -- CreateIndex
@@ -153,19 +109,19 @@ CREATE INDEX "account_userId_idx" ON "account"("userId");
 CREATE INDEX "verification_identifier_idx" ON "verification"("identifier");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "website_url_key" ON "website"("url");
+CREATE UNIQUE INDEX "website_baseUrl_key" ON "website"("baseUrl");
+
+-- CreateIndex
+CREATE INDEX "website_createdAt_idx" ON "website"("createdAt");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "category_name_key" ON "category"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "page_name_key" ON "page"("name");
+CREATE UNIQUE INDEX "category_slug_key" ON "category"("slug");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "tech_name_key" ON "tech"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "font_name_key" ON "font"("name");
+CREATE INDEX "websiteCategory_categoryId_idx" ON "websiteCategory"("categoryId");
 
 -- AddForeignKey
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -174,25 +130,7 @@ ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "account" ADD CONSTRAINT "account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "website_category" ADD CONSTRAINT "website_category_websiteId_fkey" FOREIGN KEY ("websiteId") REFERENCES "website"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "websiteCategory" ADD CONSTRAINT "websiteCategory_websiteId_fkey" FOREIGN KEY ("websiteId") REFERENCES "website"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "website_category" ADD CONSTRAINT "website_category_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "website_page" ADD CONSTRAINT "website_page_websiteId_fkey" FOREIGN KEY ("websiteId") REFERENCES "website"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "website_page" ADD CONSTRAINT "website_page_pageId_fkey" FOREIGN KEY ("pageId") REFERENCES "page"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "website_tech" ADD CONSTRAINT "website_tech_websiteId_fkey" FOREIGN KEY ("websiteId") REFERENCES "website"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "website_tech" ADD CONSTRAINT "website_tech_techId_fkey" FOREIGN KEY ("techId") REFERENCES "tech"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "website_font" ADD CONSTRAINT "website_font_websiteId_fkey" FOREIGN KEY ("websiteId") REFERENCES "website"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "website_font" ADD CONSTRAINT "website_font_fontId_fkey" FOREIGN KEY ("fontId") REFERENCES "font"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "websiteCategory" ADD CONSTRAINT "websiteCategory_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
