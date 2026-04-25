@@ -58,23 +58,6 @@ async function main() {
     })),
     skipDuplicates: true,
   });
-
-  // create 100 websites
-  for (let i = 0; i < 100; i++) {
-    await prisma.website.create({
-      data: {
-        name: `Website ${i}`,
-        baseUrl: `https://website${i}.com`,
-        icon: `https://placehold.co/32.png`,
-        thumbnail: `https://placehold.co/384x240.png`,
-        categories: {
-          create: {
-            categoryId: "cmo98aaj40007jbux83isbvdi",
-          },
-        },
-      },
-    });
-  }
 }
 
 main()
