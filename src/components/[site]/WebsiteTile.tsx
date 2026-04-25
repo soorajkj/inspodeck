@@ -4,12 +4,14 @@ import { Button } from "@base-ui/react/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowUpRight03Icon, FavouriteIcon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
-import Link from "next/link";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { Website } from "@/types/response";
 
 export default function WebsiteTile({ website }: { website: Website }) {
   const { requireAuth } = useRequireAuth();
+
+  const url = new URL(website.baseUrl);
+  url.searchParams.set("ref", "inspodeck");
 
   return (
     <div className="group relative flex cursor-pointer flex-col gap-2">
@@ -64,7 +66,13 @@ export default function WebsiteTile({ website }: { website: Website }) {
             className="relative inline-flex aspect-square size-8 shrink cursor-pointer items-center justify-center gap-1 rounded-full border border-neutral-100 text-sm leading-none font-semibold whitespace-nowrap text-neutral-800 hover:bg-neutral-200/10 disabled:pointer-events-none disabled:opacity-90 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
             aria-label="Visit website"
             nativeButton={false}
-            render={<Link href="/" rel="noopener nofollow" target="_blank" />}
+            render={
+              <a
+                href={url.toString()}
+                rel="noopener nofollow"
+                target="_blank"
+              />
+            }
           >
             <HugeiconsIcon icon={ArrowUpRight03Icon} />
           </Button>
