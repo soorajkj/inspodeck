@@ -45,12 +45,22 @@ ALTER TABLE "website_tech" DROP CONSTRAINT "website_tech_websiteId_fkey";
 DROP INDEX "website_url_key";
 
 -- AlterTable
-ALTER TABLE "website" DROP COLUMN "image",
-DROP COLUMN "title",
-DROP COLUMN "url",
-ADD COLUMN     "baseUrl" TEXT NOT NULL,
-ADD COLUMN     "icon" TEXT,
-ADD COLUMN     "name" TEXT NOT NULL;
+ALTER TABLE "website" ADD COLUMN "baseUrl" TEXT;
+ALTER TABLE "website" ADD COLUMN "icon" TEXT;
+ALTER TABLE "website" ADD COLUMN "name" TEXT;
+
+-- Backfill data
+UPDATE "website" SET "baseUrl" = split_part("url", '/', 3) WHERE "baseUrl" IS NULL;
+UPDATE "website" SET "name" = "title" WHERE "name" IS NULL;
+
+-- Set NOT NULL now that data is backfilled
+ALTER TABLE "website" ALTER COLUMN "baseUrl" SET NOT NULL;
+ALTER TABLE "website" ALTER COLUMN "name" SET NOT NULL;
+
+-- Drop old columns
+ALTER TABLE "website" DROP COLUMN "image";
+ALTER TABLE "website" DROP COLUMN "title";
+ALTER TABLE "website" DROP COLUMN "url";
 
 -- DropTable
 DROP TABLE "category";
