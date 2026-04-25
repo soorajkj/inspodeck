@@ -25,6 +25,10 @@ export type CreateWebsiteSchema = z.infer<typeof createWebsiteSchema>;
 export const getWebsitesQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).optional(),
   cursor: z.string().optional(),
+  categories: z
+    .string()
+    .optional()
+    .transform((v) => v?.split(",").filter(Boolean)),
 });
 
 export type GetWebsitesQuerySchema = z.infer<typeof getWebsitesQuerySchema>;

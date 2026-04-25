@@ -1,12 +1,8 @@
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
-import { getWebsites } from "@/utils/quries/websites";
+import { infiniteWebsitesQueryOptions } from "@/utils/quries/websites";
+import { useWebsitesFilters } from "./useWebsitesFilters";
 
 export const useWebsitesQuery = () => {
-  return useSuspenseInfiniteQuery({
-    queryKey: ["WEBSITES"],
-    queryFn: ({ pageParam }) => getWebsites({ cursor: pageParam }),
-    initialPageParam: undefined as string | undefined,
-    getNextPageParam: (lastPage) =>
-      lastPage.pageInfo.hasNextPage ? lastPage.pageInfo.endCursor : undefined,
-  });
+  const { categories } = useWebsitesFilters();
+  return useSuspenseInfiniteQuery(infiniteWebsitesQueryOptions(categories));
 };

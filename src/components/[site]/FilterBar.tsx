@@ -6,6 +6,7 @@ import { Checkbox } from "@base-ui/react/checkbox";
 import { CheckboxGroup } from "@base-ui/react/checkbox-group";
 import { ArrowDown01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useWebsitesFilters } from "@/hooks/useWebsitesFilters";
 import { useCategoriesQuery } from "@/hooks/useCategoriesQuery";
 
 export default function FilterBar() {
@@ -13,6 +14,7 @@ export default function FilterBar() {
     <aside className="scrollbar-none flex h-full flex-col overflow-y-auto px-1 py-12">
       <Accordion.Root
         multiple={true}
+        defaultValue={["category"]}
         className="grid divide-y divide-neutral-200"
       >
         <CategoryFilter />
@@ -24,6 +26,12 @@ export default function FilterBar() {
 function CategoryFilter() {
   const [search, setSearch] = useState("");
   const { data: categories = [] } = useCategoriesQuery();
+  const { categories: selectedCategories, setCategories } =
+    useWebsitesFilters();
+
+  const handleValueChange = (values: string[]) => {
+    setCategories(values.length > 0 ? values : null);
+  };
 
   const filteredCategories = useMemo(() => {
     return categories.filter((category) =>
@@ -32,7 +40,7 @@ function CategoryFilter() {
   }, [categories, search]);
 
   return (
-    <Accordion.Item>
+    <Accordion.Item value="category">
       <Accordion.Header>
         <Accordion.Trigger className="group flex w-full items-center justify-between py-4">
           <span className="text-sm font-medium">Category</span>
@@ -54,15 +62,19 @@ function CategoryFilter() {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <CheckboxGroup className="flex flex-col items-start gap-2">
-              {filteredCategories.map((category, i) => (
+            <CheckboxGroup
+              value={selectedCategories}
+              onValueChange={handleValueChange}
+              className="flex flex-col items-start gap-2"
+            >
+              {filteredCategories.map((category) => (
                 <label
-                  key={i.toString()}
+                  key={category.slug}
                   className="flex w-full items-center gap-2 text-neutral-600"
                 >
                   <Checkbox.Root
                     name={category.name}
-                    value={i.toString()}
+                    value={category.slug}
                     className="flex size-4 items-center justify-center rounded-md border border-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800 data-checked:border-neutral-950 data-checked:bg-neutral-950 data-checked:text-white"
                   >
                     <Checkbox.Indicator className="flex size-3 [&_svg]:size-3">

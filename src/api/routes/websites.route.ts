@@ -9,15 +9,13 @@ export const websitesRoute = hono.createApp().get(
   }),
   async (c) => {
     const db = c.get("prisma");
-    const { limit = 10, cursor } = c.req.valid("query");
+    const { limit = 10, cursor, categories } = c.req.valid("query");
 
     const websites = await db.website.findMany({
       take: limit + 1,
       skip: cursor ? 1 : undefined,
       cursor: cursor ? { id: cursor } : undefined,
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       include: {
         categories: {
           include: {
@@ -32,6 +30,17 @@ export const websitesRoute = hono.createApp().get(
         icon: {
           not: null,
         },
+        ...(categories?.length && {
+          categories: {
+            some: {
+              category: {
+                slug: {
+                  in: categories,
+                },
+              },
+            },
+          },
+        }),
       },
     });
 

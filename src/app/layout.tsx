@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { createTheme } from "ssr-themes";
 import { bindTheme } from "ssr-themes/react";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { fonts } from "@/lib/fonts";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import Toaster from "@/components/Toaster";
@@ -28,7 +29,9 @@ export default async function Layout({ children }: LayoutProps<"/">) {
     <html lang="en" className={fonts} suppressHydrationWarning>
       <body className="h-full min-h-dvh w-full bg-white font-sans text-base font-normal antialiased">
         <ThemeProvider forced="light">
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <NuqsAdapter>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </NuqsAdapter>
           <Toaster />
           <AuthDialog />
         </ThemeProvider>

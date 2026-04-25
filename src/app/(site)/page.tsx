@@ -1,18 +1,22 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import WebsitesGrid from "@/components/[site]/WebsitesGrid";
 import { getQueryClient } from "@/utils/queryClient";
-import { getWebsites } from "@/utils/quries/websites";
+import { infiniteWebsitesQueryOptions } from "@/utils/quries/websites";
 import { getCategories } from "@/utils/quries/categories";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ categories?: string }>;
+}) {
+  const { categories } = await searchParams;
+  const categoryList = categories?.split(",").filter(Boolean);
   const queryClient = getQueryClient();
 
   await Promise.all([
-    queryClient.prefetchInfiniteQuery({
-      queryKey: ["WEBSITES"],
-      queryFn: ({ pageParam }) => getWebsites({ cursor: pageParam }),
-      initialPageParam: undefined,
-    }),
+    queryClient.prefetchInfiniteQuery(
+      infiniteWebsitesQueryOptions(categoryList)
+    ),
     queryClient.prefetchQuery({
       queryKey: ["CATEGORIES"],
       queryFn: getCategories,
